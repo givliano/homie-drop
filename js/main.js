@@ -127,10 +127,13 @@ function setRemoteDescriptionSuccess(peerConnection) {
   setDescriptionSuccess(peerConnection, 'setRemoteDescription');
 }
 
-// If successful, Local sets the local description using setLocalDescription() and then sends this session description to Remote via their signaling channel.
-// Remote sets the description Local sent him as the remote description using setRemoteDescription().
-// Remote runs the RTCPeerConnection createAnswer() method, passing it the remote description he got from Local, so a local session can be generated that is compatible with hers. The createAnswer() promise passes on an RTCSessionDescription: Remote sets that as the local description and sends it to Local.
-// When Local gets Remote's session description, she sets that as the remote description with setRemoteDescription().
+// 1 - If successful, Local sets the local description using setLocalDescription(),
+// and then sends this session description to Remote via their signaling channel.
+// 2 - Remote sets the description Local sent him as the remote description using setRemoteDescription().
+// 3 - Remote runs the RTCPeerConnection createAnswer() method, passing it the remote
+// description he got from Local, so a local session can be generated that is compatible with hers.
+// The createAnswer() promise passes on an RTCSessionDescription: Remote sets that as the local description and sends it to Local.
+// 4 - When Local gets Remote's session description, she sets that as the remote description with setRemoteDescription().
 
 // Logs offer creation and sets peer connection session description.
 async function createdOffer(description) {
