@@ -146,7 +146,7 @@ function createdOffer(description) {
 
 // Logs answer to offer creation and sets peer connection session descriptions.
 function createdAnswer(description) {
-  trace(`Answer from remotePeerConnection:\n${description.sdp}`;
+  trace(`Answer from remotePeerConnection:\n${description.sdp}`);
 
   trace('remotePeerConnection setLocalDescription start.');
   remotePeerConnection.setLocalDescription(description)
