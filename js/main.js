@@ -37,7 +37,7 @@ function handleLocalMediaStreamError(error) {
 
 // Handles remote MediaStream success by adding it as the remoteVideo src.
 function gotRemoteMediaStream(event) {
-  const mediaStream = event.stream;
+  const mediaStream = event.streams[0];
   remoteVideo.srcObject = mediaStream;
   remoteStream = mediaStream;
   trace('Remote peer connection received remote stream.');
