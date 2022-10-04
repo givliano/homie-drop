@@ -204,7 +204,7 @@ function callAction() {
     trace(`Using video device: ${videoTracks[0].label}.`);
   }
 
-  if (audioTracks > 0) {
+  if (audioTracks.length > 0) {
     trace(`Using audio device: ${audioTracks[0].label}`);
   }
 
