@@ -70,7 +70,7 @@ remoteVideo.addEventListener('onresize', logResizedVideo);
 // Define RTC peer connection behaviour.
 
 // Connects with new peer candidate.
-function handleConnection(event) {
+async function handleConnection(event) {
   const peerConnection = event.target;
   const iceCandidate = event.candidate;
 
@@ -78,9 +78,12 @@ function handleConnection(event) {
     const newIceCandidate = new RTCIceCandidate(iceCandidate);
     const otherPeer = getOtherPeer(peerConnection);
 
-    otherPeer.addIceCandidate(newIceCandidate)
-      .then(() => handleConnectionSuccess(peerConnection))
-      .catch((error) => handleConnectionFailure(peerConnection, error));
+    try {
+      await otherPeer.addIceCandidate(newIceCandidate);
+      handleConnectionSuccess(peerConnection);
+    } catch (error) {
+      handleConnectionFailure(peerConnection, error);
+    }
 
     trace(`${getPeerName(peerConnection)} ICE candidate:\n` + `${event.candidate.candidate}`);
   }
@@ -130,38 +133,53 @@ function setRemoteDescriptionSuccess(peerConnection) {
 // When Local gets Remote's session description, she sets that as the remote description with setRemoteDescription().
 
 // Logs offer creation and sets peer connection session description.
-function createdOffer(description) {
+async function createdOffer(description) {
   trace(`Offer from localPeerConnection:\n${description.sdp}`);
 
-  trace('localPeerConnection setLocalDescription start.');
-  localPeerConnection.setLocalDescription(description)
-    .then(() => setLocalDescriptionSuccess(localPeerConnection))
-    .catch(setSessionDescriptionError);
+  try {
+    trace('localPeerConnection setLocalDescription start.');
+    await localPeerConnection.setLocalDescription(description);
+    setLocalDescriptionSuccess(localPeerConnection);
+  } catch(error) {
+    setSessionDescriptionError(error);
+  }
 
-  trace('remotePeerConnection setRemoteDescription start');
-  remotePeerConnection.setRemoteDescription(description)
-    .then(() => setRemoteDescriptionSuccess(remotePeerConnection))
-    .catch(setSessionDescriptionError);
+  try {
+    trace('remotePeerConnection setRemoteDescription start');
+    await remotePeerConnection.setRemoteDescription(description);
+    setRemoteDescriptionSuccess(remotePeerConnection);
+  } catch(error) {
+    setSessionDescriptionError(error);
+  }
 
-  trace('remotePeerConnection createAnswer start.');
-  remotePeerConnection.createAnswer()
-    .then(createdAnswer)
-    .catch(setSessionDescriptionError);
+  try {
+    trace('remotePeerConnection createAnswer start.');
+    const remoteDescription = await remotePeerConnection.createAnswer()
+    createdAnswer(remoteDescription);
+  } catch (error) {
+    setSessionDescriptionError(error);
+  }
 }
 
 // Logs answer to offer creation and sets peer connection session descriptions.
-function createdAnswer(description) {
+async function createdAnswer(description) {
   trace(`Answer from remotePeerConnection:\n${description.sdp}`);
 
-  trace('remotePeerConnection setLocalDescription start.');
-  remotePeerConnection.setLocalDescription(description)
-    .then(() => setLocalDescriptionSuccess(remotePeerConnection))
-    .catch(setSessionDescriptionError);
+  try {
+    trace('remotePeerConnection setLocalDescription start.');
+    await remotePeerConnection.setLocalDescription(description)
+    setLocalDescriptionSuccess(remotePeerConnection);
+  } catch(error) {
+    setSessionDescriptionError(error);
+  }
 
-  trace(`localPeerConnection setRemoteDescription start.`);
-  localPeerConnection.setRemoteDescription(description)
-    .then(() => setRemoteDescriptionSuccess(localPeerConnection))
-    .catch(setSessionDescriptionError);
+  try {
+    trace(`localPeerConnection setRemoteDescription start.`);
+    await localPeerConnection.setRemoteDescription(description);
+    setRemoteDescriptionSuccess(localPeerConnection);
+  } catch (error) {
+    setSessionDescriptionError(error);
+  }
 }
 
 // Define and add behavior to buttons.
@@ -189,7 +207,7 @@ async function startAction() {
 }
 
 // Handles call button action: creates peer connection.
-function callAction() {
+async function callAction() {
   callButton.disabled = true;
   hangupButton.disabled = false;
 
@@ -229,9 +247,13 @@ function callAction() {
   // localPeerConnection.addTrack(localStream);
   trace('Added local stream to localPeerConnection.');
 
-  trace('localPeerConnection createOffer start.');
-  localPeerConnection.createOffer(offerOptions)
-    .then(createdOffer).catch(setSessionDescriptionError);
+  try {
+    trace('localPeerConnection createOffer start.');
+    const localDescription = await localPeerConnection.createOffer(offerOptions)
+    createdOffer(localDescription);
+  } catch(error) {
+    setSessionDescriptionError(error);
+  }
 }
 
 // Handles hangup action: ends up call, closes connections and resets peers.
