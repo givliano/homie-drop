@@ -158,3 +158,84 @@ function createdAnswer(description) {
     .then(() => setRemoteDescriptionSuccess(localPeerConnection))
     .catch(setSessionDescriptionError);
 }
+
+// Define and add behavior to buttons.
+
+// Define action buttons.
+const startButton = document.getElementById('startButton');
+const callButton = document.getElementById('callButton');
+const hangupButton = document.getElementById('hangupButton');
+
+// Set up initial action buttons status: disable call and hangup.
+callButton.disabled = true;
+hangupButton.disabled = true;
+
+// Handles start button action: creates local MediaStream.
+function startAction() {
+  startButton.disabled = true;
+  navigator.mediaDevices.getUserMedia(mediaStreamConstraints)
+    .then(gotLocalMediaStream)
+    .catch(handleLocalMediaStreamError);
+
+  trace('Requesting local stream.');
+}
+
+// Handles call button action: creates peer connection.
+function callAction() {
+  callButton.disabled = true;
+  hangupButton.disabled = false;
+
+  trace('Starting call');
+  startTime = window.performance.now();
+
+  // Get local media stream tracks.
+  const videoTracks = localStream.getVideoTracks();
+  const audioTracks = localStream.getAudioTracks();
+
+  if (videoTracks.length > 0) {
+    trace(`Using video device: ${videoTracks[0].label}.`);
+  }
+
+  if (audioTracks > 0) {
+    trace(`Using audio device: ${audioTracks[0].label}`);
+  }
+}
+
+const servers = null; // Allows for RTC server configuration
+
+// Create peer connections and behavior.
+localPeerConnection = new RTCPeerConnection(servers);
+trace('Created local peer connection object localPeerConnection.');
+
+localPeerConnection.addEventListener('icecandidate', handleConnection);
+localPeerConnection.addEventListener('iceconnectionstatechange', handleConnectionChange);
+
+remotePeerConnection = new RTCPeerConnection(servers);
+trace('Created remote peer connection object remotePeerConnection.');
+
+remotePeerConnection.addEventListener('icecandidate', handleConnection);
+remotePeerConnection.addEvenetListener('iceconnectionstatechange', handleConnectionChange);
+
+// Add local stream to connection and create offer to connect.
+localPeerConnection.addStream(localStream);
+trace('Added local stream to localPeerConnection.');
+
+trace('localPeerConnection createOffer start.');
+localPeerConnection.createOffer(offerOptions)
+  .then(createdOffer).catch(setSessionDescriptionError);
+
+// Handles hangup action: ends up call, closes connections and resets peers.
+function hangupAction() {
+  localPeerConnection.close();
+  remotePeerConnection.close();
+  localPeerConnection = null;
+  remotePeerConnection = null;
+  hangupButton.disabled = true;
+  callButton.disabled = false;
+  trace('Ending call.');
+}
+
+// Add click event handlers for buttons.
+startButton.addEventListener('click', startAction);
+callButton.addEventListener('click', callAction);
+hangupButton.addEventListener('click', hangupAction);
