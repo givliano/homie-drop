@@ -239,3 +239,23 @@ function hangupAction() {
 startButton.addEventListener('click', startAction);
 callButton.addEventListener('click', callAction);
 hangupButton.addEventListener('click', hangupAction);
+
+// Define helper functions.
+
+// Gets the `other` peer connection
+function getOtherPeer(peerConnection) {
+  return (peerConnection === localPeerConnection) ? remotePeerConnection : localPeerConnection;
+}
+
+// Gets the name of a certain peer connection/
+function getPeerName(peerConnection) {
+  return (peerConnection === localPeerConnection) ? 'localPeerConnection' : 'remotePeerConnection';
+}
+
+// Logs an action (text) and the time when it happened on the console.
+function trace(text) {
+  text = text.trim();
+  const now = (window.performance.now() / 1000).toFixed(3);
+
+  console.log(now, text);
+}
