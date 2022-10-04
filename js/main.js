@@ -135,7 +135,7 @@ function createdOffer(description) {
 
   trace('localPeerConnection setLocalDescription start.');
   localPeerConnection.setLocalDescription(description)
-    .then(() => setLocalDescription(localPeerConnection))
+    .then(() => setLocalDescriptionSuccess(localPeerConnection))
     .catch(setSessionDescriptionError);
 
   trace('remotePeerConnection setRemoteDescription start');
