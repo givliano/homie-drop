@@ -43,6 +43,8 @@ function gotRemoteMediaStream(event) {
   trace('Remote peer connection received remote stream.');
 }
 
+// Add behavior for video streams.
+
 // Logs a message with the id and size of a video element.
 function logVideoLoaded(event) {
   const video = event.target;
