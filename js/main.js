@@ -103,11 +103,6 @@ function handleConnectionChange(event) {
   trace(`${getPeerName(peerConnection)} ICE state: ` + `${peerConnection.iceConnectionState}.`);
 }
 
-// Logs error when setting description fails.
-function setSessionDescriptionError(error) {
-  trace(`Failed to create session description: ${error.toString()}.`);
-}
-
 // Logs error when setting session description fails.
 function setSessionDescriptionError(error) {
   trace(`Failed to create session description: ${error.toString()}.`);
