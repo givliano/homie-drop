@@ -176,13 +176,16 @@ callButton.disabled = true;
 hangupButton.disabled = true;
 
 // Handles start button action: creates local MediaStream.
-function startAction() {
-  startButton.disabled = true;
-  navigator.mediaDevices.getUserMedia(mediaStreamConstraints)
-    .then(gotLocalMediaStream)
-    .catch(handleLocalMediaStreamError);
-
+async function startAction() {
   trace('Requesting local stream.');
+
+  try {
+    startButton.disabled = true;
+    const stream = await navigator.mediaDevices.getUserMedia(mediaStreamConstraints)
+    gotLocalMediaStream(stream);
+  } catch (error) {
+    handleLocalMediaStreamError(error);
+  }
 }
 
 // Handles call button action: creates peer connection.
