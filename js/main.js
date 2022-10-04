@@ -209,30 +209,31 @@ function callAction() {
   if (audioTracks > 0) {
     trace(`Using audio device: ${audioTracks[0].label}`);
   }
+
+  const servers = null; // Allows for RTC server configuration
+
+  // Create peer connections and behavior.
+  localPeerConnection = new RTCPeerConnection(servers);
+  trace('Created local peer connection object localPeerConnection.');
+
+  localPeerConnection.addEventListener('icecandidate', handleConnection);
+  localPeerConnection.addEventListener('iceconnectionstatechange', handleConnectionChange);
+
+  remotePeerConnection = new RTCPeerConnection(servers);
+  trace('Created remote peer connection object remotePeerConnection.');
+
+  remotePeerConnection.addEventListener('icecandidate', handleConnection);
+  remotePeerConnection.addEventListener('iceconnectionstatechange', handleConnectionChange);
+
+  // Add local stream to connection and create offer to connect.
+  console.log(localStream.getVideoTracks()[0])
+  localPeerConnection.addTrack(localStream.getVideoTracks()[0]);
+  trace('Added local stream to localPeerConnection.');
+
+  trace('localPeerConnection createOffer start.');
+  localPeerConnection.createOffer(offerOptions)
+    .then(createdOffer).catch(setSessionDescriptionError);
 }
-
-const servers = null; // Allows for RTC server configuration
-
-// Create peer connections and behavior.
-localPeerConnection = new RTCPeerConnection(servers);
-trace('Created local peer connection object localPeerConnection.');
-
-localPeerConnection.addEventListener('icecandidate', handleConnection);
-localPeerConnection.addEventListener('iceconnectionstatechange', handleConnectionChange);
-
-remotePeerConnection = new RTCPeerConnection(servers);
-trace('Created remote peer connection object remotePeerConnection.');
-
-remotePeerConnection.addEventListener('icecandidate', handleConnection);
-remotePeerConnection.addEvenetListener('iceconnectionstatechange', handleConnectionChange);
-
-// Add local stream to connection and create offer to connect.
-localPeerConnection.addStream(localStream);
-trace('Added local stream to localPeerConnection.');
-
-trace('localPeerConnection createOffer start.');
-localPeerConnection.createOffer(offerOptions)
-  .then(createdOffer).catch(setSessionDescriptionError);
 
 // Handles hangup action: ends up call, closes connections and resets peers.
 function hangupAction() {
