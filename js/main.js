@@ -35,6 +35,14 @@ function handleLocalMediaStreamError(error) {
   trace(`navigator.getUserMedia error: ${error.toString()}.`);
 }
 
+// Handles remote MediaStream success by adding it as the remoteVideo src.
+function gotRemoteMediaStream(event) {
+  const mediaStream = event.stream;
+  remoteVideo.srcObject = mediaStream;
+  remoteStream = mediaStream;
+  trace('Remote peer connection received remote stream.');
+}
+
 // Logs a message with the id and size of a video element.
 function logVideoLoaded(event) {
   const video = event.target;
