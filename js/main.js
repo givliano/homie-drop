@@ -222,10 +222,11 @@ function callAction() {
 
   remotePeerConnection.addEventListener('icecandidate', handleConnection);
   remotePeerConnection.addEventListener('iceconnectionstatechange', handleConnectionChange);
+  remotePeerConnection.addEventListener('track', gotRemoteMediaStream);
 
   // Add local stream to connection and create offer to connect.
-  console.log(localStream.getVideoTracks()[0])
-  localPeerConnection.addTrack(localStream.getVideoTracks()[0]);
+  localStream.getTracks().forEach(track => localPeerConnection.addTrack(track, localStream));
+  // localPeerConnection.addTrack(localStream);
   trace('Added local stream to localPeerConnection.');
 
   trace('localPeerConnection createOffer start.');
