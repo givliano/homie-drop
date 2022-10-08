@@ -27,6 +27,7 @@ socket.on('joined', function(room, clientId) {
   isInitiator = false;
 });
 
+// Logs the message from the backend in the console.
 socket.on('log', function(array) {
   console.log.apply(console, array);
-})
+});
