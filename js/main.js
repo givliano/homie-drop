@@ -98,10 +98,10 @@ navigator.mediaDevices.getUserMedia({
   video: true
 })
 .then(gotStream)
-.catch(e => alert('getUserMedia() error: ' + e.name));
+.catch(e => console.log('getUserMedia() error: ', e));
 
 function gotStream(stream) {
-  console.log('Adding local stream.');
+  console.log('Adding local stream.', stream);
   localStream = stream;
   localVideo.srcObject = stream;
   sendMessage('got user media');
