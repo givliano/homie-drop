@@ -50,7 +50,7 @@ socket.on('join', room => {
 
 socket.on('joined', room => {
   console.log(`Joined ${room}.`);
-  isChanneReady = true;
+  isChannelReady = true;
 });
 
 socket.on('log', array => {
@@ -104,7 +104,7 @@ function gotStream(stream) {
   console.log('Adding local stream.');
   localStream = stream;
   localVideo.srcObject = stream;
-  sendMEssage('got user media');
+  sendMessage('got user media');
 
   if (isInitiator) {
     maybeStart();
@@ -184,7 +184,7 @@ function doCall() {
 function doAnswer() {
   console.log('Sending answer to peed');
   pc.createAnswer().then(
-    setLocalAndMessage,
+    setLocalAndSendMessage,
     onCreateSessionDescriptionError
   );
 }
