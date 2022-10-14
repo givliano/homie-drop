@@ -223,6 +223,145 @@ if (isInitiator) {
 } else {
   peerConn.ondatachannel = (e) => {
     console.log('ondatachannel:', e.channel);
-
+    dataChannel = e.channel;
+    onDataChannelCreated(dataChannel);
   }
 }
+
+function onLocalSessionCreated(description) {
+  console.log('Local session created:', description);
+  peerConn.setLocalDescription(description)
+    .then(() => {
+      console.log('Sending local description:', peerConn.localDescription);
+      sendMessage(peerConn.localDescription);
+    })
+    .catch(logError);
+}
+
+function onDataChannelCreated(channel) {
+  console.log('onDataChannelCreated:', channel);
+
+  channel.onopen = () => {
+    console.log('CHANNEL OPENED!');
+    sendBtn.disabled = false;
+    snapAndSendBtn.disabled = false;
+  };
+
+  channel.onclose = () => {
+    console.log('CHANNEL CLOSED!');
+    sendBtn.disabled = false;
+    snapAndSendBtn.disabled = false;
+  };
+
+  channel.onmessage = (adapter.browserDetails.browser === 'firefox') ? receiveDataFirefoxFactory() : receiveDataChromeFactory;
+}
+
+function receiveDataChromeFactory() {
+  let buf;
+  let count;
+
+  return function onemssage(event) {
+    if (typeof event.data === 'string') {
+      buf = window.buf = new Uint8ClampedArray(parseInt(event.data));
+      count = 0;
+      console.log('Expecting a total of ' + buf.byteLength + ' bytes');
+      return;
+    }
+
+    const data = new Uint8ClampedArray(event.data);
+    buf.set(data, count);
+
+    count += data.byteLength;
+    console.log('count: ', + count);
+
+    if (count === buf.byteLength) {
+      // We are done, all chunks have been received.
+      console.log('DONE. Rendering photo.');
+      renderPhoto(buf);
+    }
+  };
+}
+
+function receiveDataFirefoxFactory() {
+  let count;
+  let total;
+  let parts;
+
+  return function onmessage(event) {
+    if (typeof event.data === 'string') {
+      total = parseInt(event.data);
+      parts = [];
+      count = 0;
+      console.log('Expecting a total of ' + total + ' bytes');
+      return;
+    }
+
+    parts.push(event.data);
+    count += event.data.size;
+    console.log(`Got ${event.data.size} byte(s), ${total - count} to go`);
+
+    if (count === total) {
+      console.log('Assembling payload');
+      const buf = new Uint8ClampedArray(total);
+      const compose = (i, pos) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          buf.set(new Uint8ClampedArray(this.result), pos);
+
+          if ((i + 1) === parts.length) {
+            console.log('DONE. Rendering photo');
+            renderPhoto(buf);
+          } else {
+            compose((i + 1), (pos + this.result.byteLength));
+          }
+        };
+        reader.readAsArrayBuffer(parts[i]);
+      };
+      compose(0, 0);
+    }
+  };
+}
+
+/**
+ * Aux functions, mostrly UI related.
+ */
+
+function snapPhoto() {
+  photoContext.drawImage(video, 0, 0, photo.width, photo.height);
+  show(photo, sendBtn);
+}
+
+function sendPhoto() {
+  // Split data channel message in chunk of this byte length.
+  const CHUNK_LEN = 64000;
+  console.log('width and height ', photoContextW, photoContextH);
+  const img = photoContext.getImageData(0, 0, photoContextW, photoContextH);
+  len = img.data.byteLength;
+  n = len / CHUNK_LEN | 0; // wtf is this magic?
+
+  console.log('Sending a total of ' + len + ' byte(s)');
+
+  if (!dataChannel) {
+    logError('Connection has not been initiated. ' + 'Get two peers in the same room first');
+    return;
+  } else if (dataChannel.readyState === 'closed') {
+    logError('Connection was lost. Peer closed the connection.');
+    return;
+  }
+
+  dataChannel.send(len);
+
+  // Split the photo and send in chunks of about 64 KB.
+  for (let i = 0; i < n; i++) {
+    const start = i * CHUNK_LEN;
+    const end = (i + 1) * CHUNK_LEN;
+    console.log(start + ' - ' + (end - 1));
+    dataChannel.send(img.data.subarray(start, end));
+  }
+
+  // Send the reminder, if any.
+  if (len % CHUNK_LEN) {
+    console.log(`Last ${len % CHUNK_LEN} byte(s)`);
+  }
+}
+
