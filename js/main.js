@@ -334,7 +334,7 @@ function snapPhoto() {
   photoContext.drawImage(video, 0, 0, photo.width, photo.height);
   show(photo, sendBtn);
 }
-
+ß
 function sendPhoto() {
   // Split data channel message in chunk of this byte length.
   const CHUNK_LEN = 64000;
