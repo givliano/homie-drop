@@ -31,11 +31,11 @@ snapAndSendBtn.addEventListener('click', snapAndSend);
 
 // Disabled send button by defaul
 sendBtn.disabled = true;
-snapAndSndBtn.disabled = true;
+snapAndSendBtn.disabled = true;
 
 // Create a random room if not already present in the url.
 let isInitiator;
-const room = window.location.hash.substring(1);
+let room = window.location.hash.substring(1);
 if (!room) {
   room = window.location.hash = randomToken();
 }
@@ -74,7 +74,7 @@ socket.on('ready', function() {
   createPeerConnection(isInitiator, configuration);
 });
 
-socket.log('log', function(array) {
+socket.on('log', function(array) {
   console.log.apply(console, array);
 });
 
@@ -146,7 +146,11 @@ function grabWebCamVideo() {
 function gotStream(stream) {
   console.log('getUserMedia video stream URL:', stream);
   window.stream = stream;
-  video.srcObject = stream.getTracks()[0];
+  console.log('STREAM');
+  console.log(stream);
+  console.log(video);
+  // video.srcObject = stream.getTracks()[0];
+  video.srcObject = stream;
   video.onloadeddata = () => {
     photo.width = photoContextW = video.videoWidth;
     photo.height = photoContextH = video.videoHeight;
@@ -189,42 +193,42 @@ function signalingMessageCallback(message) {
 function createPeerConnection(isInitiator, config) {
   console.log(`Creating peer connection as initiator? ${isInitiator}, config: ${config}`);
   peerConn = new RTCPeerConnection(config);
-}
 
-// send any ice candidates t the other peer
-peerConn.onicecandidate = (e) => {
-  console.log('icecandidate event: ', e);
-  if (e.candidate) {
-    sendMessage({
-      type: 'candidate',
-      label: e.candidate.sdpMLineIndex,
-      id: e.candidate.sdpMid,
-      candidate: e.candidate.candidate
-    });
-  } else {
-    console.log('End of candidates.');
-  }
-};
+  // send any ice candidates t the other peer
+  peerConn.onicecandidate = (e) => {
+    console.log('icecandidate event: ', e);
+    if (e.candidate) {
+      sendMessage({
+        type: 'candidate',
+        label: e.candidate.sdpMLineIndex,
+        id: e.candidate.sdpMid,
+        candidate: e.candidate.candidate
+      });
+    } else {
+      console.log('End of candidates.');
+    }
+  };
 
-if (isInitiator) {
-  console.log('Creating Data Channel');
-  dataChannel = peerConn.createDataChannel('photos');
-  onDataChannelCreated(dataChannel);
-
-  console.log('Creating an offer');
-  peerConn.createOffer().then(offer => {
-    return peerConn.setLocalDescription(offer);
-  })
-  .then(() => {
-    console.log('sending local desc:', peerConn.localDescription);
-    sendMessage(peerConn.localDescription);
-  })
-  .catch(logError);
-} else {
-  peerConn.ondatachannel = (e) => {
-    console.log('ondatachannel:', e.channel);
-    dataChannel = e.channel;
+  if (isInitiator) {
+    console.log('Creating Data Channel');
+    dataChannel = peerConn.createDataChannel('photos');
     onDataChannelCreated(dataChannel);
+
+    console.log('Creating an offer');
+    peerConn.createOffer().then(offer => {
+      return peerConn.setLocalDescription(offer);
+    })
+    .then(() => {
+      console.log('sending local desc:', peerConn.localDescription);
+      sendMessage(peerConn.localDescription);
+    })
+    .catch(logError);
+  } else {
+    peerConn.ondatachannel = (e) => {
+      console.log('ondatachannel:', e.channel);
+      dataChannel = e.channel;
+      onDataChannelCreated(dataChannel);
+    }
   }
 }
 
@@ -362,6 +366,40 @@ function sendPhoto() {
   // Send the reminder, if any.
   if (len % CHUNK_LEN) {
     console.log(`Last ${len % CHUNK_LEN} byte(s)`);
+    dataChannel.send(img.data.subarray*n * CHUNK_LEN);
+  }
+}
+
+function renderPhoto(data) {
+  const canvas = document.createElement('canvas');
+  canvas.width = photoContextW;
+  canvas.height = photoContextH;
+  canvas.classList.add('incomingPhoto');
+  // Trail is the element holding the incoming images
+  trail.insertBefore(canvas, trail.firstChild);
+
+  const context = canvas.getContext('2d');
+  const img = context.createImageData(photoContextW, photoContextH);
+  img.data.set(data);
+  context.putImageData(img, 0, 0);
+}
+
+function show() {
+  Array.prototype.forEach.call(arguments, function(elem) {
+    elem.style.display = 'none';
+  })
+}
+
+function randomToken() {
+  return Math.floor((1 + Math.random()) * 1e16).toString(16).substring(1);
+}
+
+function logError(err) {
+  if (!err) return;
+  if (typeof err === 'string') {
+    console.warn(err);
+  } else {
+    console.warn(err.toString(), err);
   }
 }
 
