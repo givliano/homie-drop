@@ -10,9 +10,13 @@
 <body>
   <h1>Realtime Communication with WebRTC</h1>
 
-  <div id="videos">
-    <video id="localVideo" autoplay muted></video>
-    <video id="remoteVideo" autoplay></video>
+  <h2>
+    <span>Room URL: </span><span id="url">...</span>
+  </h2>
+
+  <div id="videoCanvas">
+    <video id="video"></video>
+    <canvas id="photo"></canvas>
   </div>
 
   <div id="buttons">
