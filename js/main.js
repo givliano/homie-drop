@@ -109,6 +109,11 @@ socket.on('bye', function(room) {
   }
 });
 
+window.addEventListener('unload', function() {
+  console.log(`Unloading window.Notifying peers in ${room}`);
+  socket.emit('bye', room);
+})
+
 /**
  * Send message to signaling server
  */
