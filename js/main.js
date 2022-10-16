@@ -347,8 +347,8 @@ function sendPhoto() {
   const CHUNK_LEN = 64000;
   console.log('width and height ', photoContextW, photoContextH);
   const img = photoContext.getImageData(0, 0, photoContextW, photoContextH);
-  len = img.data.byteLength;
-  n = len / CHUNK_LEN | 0; // wtf is this magic?
+  const len = img.data.byteLength;
+  const n = len / CHUNK_LEN | 0; // wtf is this magic?
 
   console.log('Sending a total of ' + len + ' byte(s)');
 
