@@ -136,16 +136,17 @@ function sendMessage(message) {
 /**
  * User media (webcam)
  */
-function grabWebCamVideo() {
+async function grabWebCamVideo() {
   console.log('Getting user media (video) ...');
-  navigator.mediaDevices.getUserMedia({
-    audio: false,
-    video: true
-  })
-  .then(gotStream)
-  .catch(function(e) {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: true
+    });
+    gotStream(stream);
+  } catch (e) {
     console.log('ERROR GETUSERMEDIA()', e);
-  });
+  }
 }
 
 function gotStream(stream) {
