@@ -393,6 +393,12 @@ function renderPhoto(data) {
 
 function show() {
   Array.prototype.forEach.call(arguments, function(elem) {
+    elem.style.display = null;
+  });
+}
+
+function hide() {
+  Array.prototype.forEach.call(arguments, function(elem) {
     elem.style.display = 'none';
   });
 }
