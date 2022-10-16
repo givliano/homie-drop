@@ -134,7 +134,7 @@ function sendMessage(message) {
 // }
 
 /**
- * User media (webcao)
+ * User media (webcam)
  */
 function grabWebCamVideo() {
   console.log('Getting user media (video) ...');
