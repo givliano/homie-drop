@@ -54,6 +54,12 @@ socket.on('ipaddr', function(ipaddr) {
 
 socket.on('created', function(room, clientId) {
   console.log(`Created room ${room} - my client ID is ${clientId}`);
+  isInitiator = true;
+  grabWebCamVideo();
+});
+
+socket.on('joined', function(room, clientId) {
+  console.log(`This peer has joined room ${room}, with cliend ID ${clientId}`);
   isInitiator = false;
   createPeerConnection(isInitiator, configuration);
   grabWebCamVideo();
@@ -76,7 +82,7 @@ socket.on('log', function(array) {
 
 socket.on('message', function(message) {
   console.log('Client received message:', message);
-  signalingMessageallback(message);
+  signalingMessageCallback(message);
 });
 
 socket.emit('create or join', room);
