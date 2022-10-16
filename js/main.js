@@ -373,7 +373,7 @@ function sendPhoto() {
   // Send the reminder, if any.
   if (len % CHUNK_LEN) {
     console.log(`Last ${len % CHUNK_LEN} byte(s)`);
-    dataChannel.send(img.data.subarray*n * CHUNK_LEN);
+    dataChannel.send(img.data.subarray * n * CHUNK_LEN);
   }
 }
 
@@ -394,7 +394,7 @@ function renderPhoto(data) {
 function show() {
   Array.prototype.forEach.call(arguments, function(elem) {
     elem.style.display = 'none';
-  })
+  });
 }
 
 function randomToken() {
