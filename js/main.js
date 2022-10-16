@@ -152,10 +152,6 @@ async function grabWebCamVideo() {
 function gotStream(stream) {
   console.log('getUserMedia video stream URL:', stream);
   window.stream = stream;
-  console.log('STREAM');
-  console.log(stream);
-  console.log(video);
-  // video.srcObject = stream.getTracks()[0];
   video.srcObject = stream;
   video.onloadeddata = () => {
     photo.width = photoContextW = video.videoWidth;
