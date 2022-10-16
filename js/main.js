@@ -52,10 +52,6 @@ socket.on('ipaddr', function(ipaddr) {
   // updateRoomURL(ipaddr);
 });
 
-socket.on('ipaddr', function(ipaddr) {
-  console.log('Server IP address is: ' + ipaddr);
-});
-
 socket.on('created', function(room, clientId) {
   console.log(`Created room ${room} - my client ID is ${clientId}`);
   isInitiator = false;
