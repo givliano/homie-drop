@@ -365,13 +365,14 @@ function sendPhoto() {
     const start = i * CHUNK_LEN;
     const end = (i + 1) * CHUNK_LEN;
     console.log(start + ' - ' + (end - 1));
+    // Start is inclusive, end is exclusive.
     dataChannel.send(img.data.subarray(start, end));
   }
 
   // Send the reminder, if any.
   if (len % CHUNK_LEN) {
     console.log(`Last ${len % CHUNK_LEN} byte(s)`);
-    dataChannel.send(img.data.subarray * n * CHUNK_LEN);
+    dataChannel.send(img.data.subarray(n * CHUNK_LEN));
   }
 }
 
