@@ -153,7 +153,7 @@ function gotStream(stream) {
   console.log('getUserMedia video stream URL:', stream);
   window.stream = stream;
   video.srcObject = stream;
-  video.onloadeddata = () => {
+  video.onloadedmetadata = () => {
     photo.width = photoContextW = video.videoWidth;
     photo.height = photoContextH = video.videoHeight;
     console.log(`gotStream with width and height: ${photoContextW}, ${photoContextH}`);
