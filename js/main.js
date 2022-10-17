@@ -217,14 +217,13 @@ function createPeerConnection(isInitiator, config) {
     onDataChannelCreated(dataChannel);
 
     console.log('Creating an offer');
-    peerConn.createOffer().then(offer => {
-      return peerConn.setLocalDescription(offer);
-    })
-    .then(() => {
-      console.log('sending local desc:', peerConn.localDescription);
-      sendMessage(peerConn.localDescription);
-    })
-    .catch(logError);
+    peerConn.createOffer()
+      .then(offer => peerConn.setLocalDescription(offer))
+      .then(() => {
+        console.log('sending local desc:', peerConn.localDescription);
+        sendMessage(peerConn.localDescription);
+      })
+      .catch(logError);
   } else {
     peerConn.ondatachannel = (e) => {
       console.log('ondatachannel:', e.channel);
