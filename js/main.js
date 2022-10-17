@@ -266,7 +266,10 @@ function receiveDataChromeFactory() {
   let count;
 
   return function onemssage(event) {
+    // Sending client will send the size of the buffer before
+    // sending the data.
     if (typeof event.data === 'string') {
+      // Create a buffer for the next data.
       buf = window.buf = new Uint8ClampedArray(parseInt(event.data));
       count = 0;
       console.log('Expecting a total of ' + buf.byteLength + ' bytes');
@@ -341,6 +344,7 @@ function sendPhoto() {
   const CHUNK_LEN = 64000;
   console.log('width and height ', photoContextW, photoContextH);
   const img = photoContext.getImageData(0, 0, photoContextW, photoContextH);
+  // Amount of bytes in the image data.
   const len = img.data.byteLength;
   const n = len / CHUNK_LEN | 0; // wtf is this magic?
 
