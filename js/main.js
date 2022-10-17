@@ -371,6 +371,11 @@ function sendPhoto() {
   }
 }
 
+function snapAndSend() {
+  snapPhoto();
+  sendPhoto();
+}
+
 function renderPhoto(data) {
   const canvas = document.createElement('canvas');
   canvas.width = photoContextW;
