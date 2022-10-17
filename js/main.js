@@ -254,8 +254,8 @@ function onDataChannelCreated(channel) {
 
   channel.onclose = () => {
     console.log('CHANNEL CLOSED!');
-    sendBtn.disabled = false;
-    snapAndSendBtn.disabled = false;
+    sendBtn.disabled = true;
+    snapAndSendBtn.disabled = true;
   };
 
   channel.onmessage = (adapter.browserDetails.browser === 'firefox') ? receiveDataFirefoxFactory() : receiveDataChromeFactory;
