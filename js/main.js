@@ -258,7 +258,8 @@ function onDataChannelCreated(channel) {
     snapAndSendBtn.disabled = true;
   };
 
-  channel.onmessage = (adapter.browserDetails.browser === 'firefox') ? receiveDataFirefoxFactory() : receiveDataChromeFactory;
+  // channel.onmessage = (adapter.browserDetails.browser === 'firefox') ? receiveDataFirefoxFactory() : receiveDataChromeFactory();
+  channel.onmessage = receiveDataChromeFactory();
 }
 
 function receiveDataChromeFactory() {
