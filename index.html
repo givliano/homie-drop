@@ -14,6 +14,9 @@
     <span>Room URL: </span><span id="url">...</span>
   </h2>
 
+  <input type="file" id="input" multiple />
+  <div id="preview"></div>
+
   <div id="videoCanvas">
     <video id="video" autoplay playsinline></video>
     <canvas id="photo"></canvas>
@@ -33,4 +36,30 @@
 </body>
   <script src="/socket.io/socket.io.js"></script>
   <script src="/js/main.js"></script>
+  <script>
+    const r = new FileReader();
+    r.onload = () => console.log('hurr durr')
+    const input = document.getElementById('input');
+    input.addEventListener('change', handleFiles, false);
+    function handleFiles() {
+      for (const file of this.files) {
+        if (!file.type.startsWith('image/')) {
+          return;
+        }
+        const img = document.createElement('img');
+        img.classList.add('obj');
+        img.file = file;
+
+        const preview = document.getElementById('preview');
+        preview.appendChild(img);
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          console.log(e);
+          img.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+  </script>
 </html>
