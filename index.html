@@ -5,10 +5,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/main.css">
-  <title>Realtime Communication with WebRTC</title>
+  <title>Open Drop</title>
 </head>
 <body>
-  <h1>Realtime Communication with WebRTC</h1>
+  <h1>Open Drop</h1>
 
   <h2>
     <span>Room URL: </span><span id="url">...</span>
@@ -37,29 +37,38 @@
   <script src="/socket.io/socket.io.js"></script>
   <script src="/js/main.js"></script>
   <script>
-    const r = new FileReader();
-    r.onload = () => console.log('hurr durr')
-    const input = document.getElementById('input');
-    input.addEventListener('change', handleFiles, false);
-    function handleFiles() {
-      for (const file of this.files) {
-        if (!file.type.startsWith('image/')) {
-          return;
-        }
-        const img = document.createElement('img');
-        img.classList.add('obj');
-        img.file = file;
+    // const input = document.getElementById('input');
+    // input.addEventListener('change', handleFiles, false);
+    // function handleFiles() {
+    //   for (const file of this.files) {
+    //     if (!file.type.startsWith('image/')) {
+    //       return;
+    //     }
+    //     const img = document.createElement('img');
+    //     img.classList.add('obj');
+    //     img.file = file;
 
-        const preview = document.getElementById('preview');
-        preview.appendChild(img);
+    //     const preview = document.getElementById('preview');
+    //     preview.appendChild(img);
 
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          console.log(e);
-          img.src = e.target.result;
-        }
-        reader.readAsDataURL(file);
-      }
-    }
+    //     const reader = new FileReader();
+    //     reader.onload = (e) => {
+    //       console.log(e);
+    //       img.src = e.target.result;
+    //     }
+    //     // To trigger the load event we must use one of the read methods of the FileReader.
+    //     reader.readAsDataURL(file);
+    //   }
+    // }
   </script>
 </html>
+<!-- OPEN DROP -->
+<!-- OPEN DROP -->
+<!-- OPEN DROP -->
+<!-- OPEN DROP -->
+<!-- OPEN DROP -->
+<!-- OPEN DROP -->
+<!-- OPEN DROP -->
+<!-- OPEN DROP -->
+<!-- OPEN DROP -->
+<!-- OPEN DROP -->

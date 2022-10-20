@@ -28,7 +28,7 @@ sendBtn.addEventListener('click', sendPhoto);
 snapAndSendBtn.addEventListener('click', snapAndSend);
 
 // Disabled send button by defaul
-sendBtn.disabled = true;
+// sendBtn.disabled = true;
 snapAndSendBtn.disabled = true;
 
 // Create a random room if not already present in the url.
@@ -214,6 +214,8 @@ function createPeerConnection(isInitiator, config) {
   if (isInitiator) {
     console.log('Creating Data Channel');
     dataChannel = peerConn.createDataChannel('photos');
+    dataChannel.binaryType = 'arraybuffer';
+
     onDataChannelCreated(dataChannel);
 
     console.log('Creating an offer');
@@ -286,6 +288,7 @@ function receiveDataChromeFactory() {
     if (count === buf.byteLength) {
       // We are done, all chunks have been received.
       console.log('DONE. Rendering photo.');
+      console.log(buf);
       renderPhoto(buf);
     }
   };
@@ -340,13 +343,85 @@ function snapPhoto() {
   show(photo, sendBtn);
 }
 
-function sendPhoto() {
+const input = document.getElementById('input');
+input.addEventListener('change', handleFiles, false);
+var imageFiles = [];
+
+async function handleFiles() {
+  for (const file of this.files) {
+    if (!file.type.startsWith('image/')) {
+      return;
+    }
+    imageFiles.push(file)
+
+    console.warn('added files', file);
+    // const img = document.createElement('img');
+    // img.classList.add('obj');
+    // img.file = file;
+
+    // const preview = document.getElementById('preview');
+    // preview.appendChild(img);
+
+    // const reader = new FileReader();
+    // reader.onload = (e) => {
+      // console.log(e);
+      // img.src = e.target.result;
+    // }
+    // To trigger the load event we must use one of the read methods of the FileReader.
+    // reader.readAsDataURL(file);
+
+    // const url = URL.createObjectURL(file);          // create an Object URL
+    // const img = new Image();                         // create a temp. image object
+
+  // img.onload = function() {                    // handle async image loading
+    // URL.revokeObjectURL(this.src);             // free memory held by Object URL
+    // c.getContext("2d").drawImage(this, 0, 0);  // draw image onto canvas (lazy method™)
+  // };
+
+  // img.src = url;
+
+    // const blob = await file.arrayBuffer();
+    // const buf = new TypedArray(blob);
+    // console.log(buf);
+    // console.log(blob);
+    // img = blob;
+    // return blob;
+  }
+  imageFiles.forEach(file => {
+    const objectURL = window.URL.createObjectURL(file);
+    const img = document.createElement('img');
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    console.log('file', file);
+    canvas.classList.add('image-file', 'img-preview')
+    img.onload = () => {
+      console.log('loaded img', img);
+      ctx.drawImage(
+                    img,
+                    0, 0, img.width, img.height,
+                    0, 0, canvas.width, canvas.height
+      );
+      document.getElementById('preview').appendChild(canvas);
+      window.URL.revokeObjectURL(objectURL);
+    }
+    img.src = objectURL;
+  });
+
+
+}
+
+async function sendPhoto() {
   // Split data channel message in chunk of this byte length.
   const CHUNK_LEN = 64000;
   console.log('width and height ', photoContextW, photoContextH);
-  const img = photoContext.getImageData(0, 0, photoContextW, photoContextH);
+  // const img = photoContext.getImageData(0, 0, photoContextW, photoContextH);
   // Amount of bytes in the image data.
-  const len = img.data.byteLength;
+  // const len = img.data.byteLength;
+  const buffer = await imageFiles[0].arrayBuffer();
+  console.warn('buffer');
+  console.log(buffer);
+  const img = new Uint8ClampedArray(buffer);
+  const len = img.byteLength;
   const n = len / CHUNK_LEN | 0; // wtf is this magic?
 
   console.log('Sending a total of ' + len + ' byte(s)');
@@ -367,13 +442,13 @@ function sendPhoto() {
     const end = (i + 1) * CHUNK_LEN;
     console.log(start + ' - ' + (end - 1));
     // Start is inclusive, end is exclusive.
-    dataChannel.send(img.data.subarray(start, end));
+    dataChannel.send(img.subarray(start, end));
   }
 
   // Send the reminder, if any.
   if (len % CHUNK_LEN) {
     console.log(`Last ${len % CHUNK_LEN} byte(s)`);
-    dataChannel.send(img.data.subarray(n * CHUNK_LEN));
+    dataChannel.send(img.subarray(n * CHUNK_LEN));
   }
 }
 
@@ -383,6 +458,58 @@ function snapAndSend() {
 }
 
 function renderPhoto(data) {
+  console.warn('rendering data');
+  console.warn('DATA')
+  console.log(data);
+  // console.log(new Blob(data))
+
+  // var arrayBuffer;
+  // var fileReader = new FileReader();
+  // fileReader.onload = function(event) {
+      // arrayBuffer = event.target.result;
+  // };
+  // fileReader.readAsArrayBuffer(new Blob(data, { type: 'image/jpeg' }));
+  // console.log(fileReader);
+  // console.log(arrayBuffer);
+
+  // const objectURL = window.URL.createObjectURL(new Blob(data, { type: 'image/jpeg' }));
+  // document.querySelector('#preview').innerHTML = `<a href="${objectURL}" download="foo.jpeg">Download</a>`
+
+  const downloadFile = (blobObject, fileName) => {
+    const link = document.createElement("a");
+    const href = window.URL.createObjectURL(blobObject);
+    link.href = href;
+    link.download = fileName;
+
+    link.click();
+
+    window.URL.revokeObjectURL(href);
+
+    link.remove();
+
+    return true;
+  };
+
+
+  let offset = 0;
+
+  const uintArrayBuffer = new Uint8Array(data.length, 0);
+
+  data.forEach((arrayBuffer) => {
+    uintArrayBuffer.set(
+      new Uint8Array(arrayBuffer.buffer || arrayBuffer, arrayBuffer.byteOffset),
+      offset
+    );
+    offset += arrayBuffer.byteLength;
+  });
+
+  const blobObject = new Blob([uintArrayBuffer]);
+
+  downloadFile(blobObject, 'fuck.jpeg');
+
+
+
+
   const canvas = document.createElement('canvas');
   canvas.width = photoContextW;
   canvas.height = photoContextH;

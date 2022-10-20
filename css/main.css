@@ -4,3 +4,8 @@ video {
   /* filter: blur(4px) invert(1) opacity(0.5); */
   /* filter: hue-rotate(180deg) saturate(200%); */
 }
+
+.img-preview {
+  width: 100px;
+  height: 100px;
+}
