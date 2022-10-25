@@ -490,25 +490,10 @@ function renderPhoto(data) {
     return true;
   };
 
-
-  let offset = 0;
-
-  const uintArrayBuffer = new Uint8Array(data.length, 0);
-
-  data.forEach((arrayBuffer) => {
-    uintArrayBuffer.set(
-      new Uint8Array(arrayBuffer.buffer || arrayBuffer, arrayBuffer.byteOffset),
-      offset
-    );
-    offset += arrayBuffer.byteLength;
-  });
-
-  const blobObject = new Blob([uintArrayBuffer]);
+  const uintArrayBuffer = new Uint8Array(data);
+  const blobObject = new Blob([uintArrayBuffer], { type: 'image/jpeg' });
 
   downloadFile(blobObject, 'fuck.jpeg');
-
-
-
 
   const canvas = document.createElement('canvas');
   canvas.width = photoContextW;
