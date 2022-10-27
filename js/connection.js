@@ -114,4 +114,58 @@ class Peer {
       }
     }
   }
+
+  async sendPhoto() {
+    // Split data in chunks of maximum allowed in the webRTC spec.
+    const CHUNK_LEN = 64000;
+    const fileBuffer = await imageFiles[0].arrayBuffer();
+    const buffer = new Uint8ClampedArray(fileBuffer);
+    const bufferLen = buffer.byteLength;
+    const nChunks = bufferLen / CHUNK_LEN | 0;
+
+    console.log(`Sending a total of ${bufferLen} byte(s).`);
+
+    if (!this.dataChannel) {
+      logError('Connection has not been initiated. ' + 'Get two peers in the same room first');
+      return;
+    } else if (this.dataChannel.readyState === 'closed') {
+      logError('Connection was lost. Peer closed the connection.');
+      return;
+    }
+
+    // Send first message with file buffer length
+    this.dataChannel.send(bufferLen);
+
+    // Send the chunks
+    for (let i = 0; i < nChunks; i++) {
+      const start = i * CHUNK_LEN;
+      const end = (i + 1) * CHUNK_LEN;
+      console.log(start + ' - ' + (end - 1));
+      // Start is inclusive, end is exclusive
+      this.dataChannel.send(buffer.subarray(start, end));
+    }
+
+    // Send the remainder, if any.
+    if (bufferLen % CHUNK_LEN) {
+      console.log(`Last ${bufferLen % CHUNK_LEN} byte(s)`);
+    }
+  }
+
+  downloadFile(blob, fileName) {
+    const link = document.createElement('a');
+    const href = window.URL.createObjectURL(blob);
+
+    link.href = href;
+    link.download = fileName;
+    link.click();
+    window.URL.revokeObjectURL(href);
+    link.remove();
+  }
+
+  getCompleteFile(data) {
+    const fileBuffer = new Uint8Array(data);
+    const blob = new Blob([fileBuffer], { type: 'image/jpeg' });
+
+    this.downloadFile(blob, 'hello.jpeg');
+  }
 }
