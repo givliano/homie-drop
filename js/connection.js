@@ -1,3 +1,5 @@
+import logError from './utils';
+
 export default class Peer {
   constructor() {
     isInitiator = false;
