@@ -1,19 +1,19 @@
-var configuration = {
-  'iceServers': [{
-    'urls': 'stun:stun.l.google.com:19302'
-  }]
-};
-
-class Peer {
+export default class Peer {
   constructor() {
     isInitiator = false;
     peerConn = null;
     dataChannel = null;
   }
 
-  createPeerConnection(isInitiator, config) {
-    console.log(`Creating a peer connection as initiator? ${isInitiator}, with config ${config}`)
-    this.peerConn = new RTCPeerConnection(config);
+  #configuration = {
+    'iceServers': [{
+      'urls': 'stun:stun.l.google.com:19302'
+    }]
+  };
+
+  createPeerConnection(isInitiator) {
+    console.log(`Creating a peer connection as initiator? ${isInitiator}, with config ${this.#configuration}`)
+    this.peerConn = new RTCPeerConnection(this.#configuration);
     this.peerConn.onicecandidate = this.onIceCandidate;
   }
 
