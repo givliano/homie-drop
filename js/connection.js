@@ -1,5 +1,8 @@
 import logError from './utils';
 
+/**
+ * WebRTC peer connection and data channel
+ */
 export default class Peer {
   constructor() {
     isInitiator = false;
