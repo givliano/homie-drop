@@ -3,7 +3,9 @@
 /****************************************************************************
 * Initial setup
 ****************************************************************************/
+import Peer from './connection';
 
+const peer = new Peer();
 
 // var roomURL = document.getElementById('url');
 const video = document.getElementById('video');
@@ -18,8 +20,8 @@ let photoContextW;
 let photoContextH;
 
 // Attach event handlers
-snapBtn.addEventListener('click', snapPhoto);
-sendBtn.addEventListener('click', sendPhoto);
+snapBtn.addEventListener('click', peer.snapPhoto);
+sendBtn.addEventListener('click', peer.sendPhoto);
 snapAndSendBtn.addEventListener('click', snapAndSend);
 
 // Disabled send button by defaul
@@ -54,7 +56,7 @@ socket.on('created', function(room, clientId) {
 socket.on('joined', function(room, clientId) {
   console.log(`This peer has joined room ${room}, with cliend ID ${clientId}`);
   isInitiator = false;
-  createPeerConnection(isInitiator, configuration);
+  peer.createPeerConnection(isInitiator);
   grabWebCamVideo();
 });
 
@@ -66,7 +68,7 @@ socket.on('full', function(room) {
 
 socket.on('ready', function() {
   console.log('Socket is ready');
-  createPeerConnection(isInitiator, configuration);
+  peer.createPeerConnection(isInitiator);
 });
 
 socket.on('log', function(array) {
@@ -75,7 +77,7 @@ socket.on('log', function(array) {
 
 socket.on('message', function(message) {
   console.log('Client received message:', message);
-  signalingMessageCallback(message);
+  peer.signalingMessageCallback(message);
 });
 
 socket.emit('create or join', room);
@@ -447,7 +449,7 @@ async function sendPhoto() {
   }
 }
 
-function snapAndSend() {
+async function snapAndSend() {
   snapPhoto();
   sendPhoto();
 }
