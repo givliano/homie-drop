@@ -11,6 +11,33 @@ export default class Peer {
     }]
   };
 
+  signalingMessageCallback(message) {
+    if (message.type === 'offer') {
+      console.log('Got offer. Sending answer to peer.');
+      this.peerConn.setRemoteDescription(
+        new RTCSessionDescription(message),
+        function() {},
+        logError
+      );
+      this.peerConn.createAnswer(this.onLocalSessionCreated, logError)
+    } else if (message.type === 'answer') {
+      console.log('Got anwswer.');
+      this.peerConn.setRemoteDescription(
+        new RTCSessionDescription(message),
+        function() {},
+        logError
+      );
+    } else if (message.type === 'candidate') {
+      this.peerConn.addIceCandidate(
+        new RTCIceCandidate({
+          candidate: message.candidate,
+          sdpMLineIndex: message.label,
+          sdpMid: message.id
+        })
+      );
+    }
+  }
+
   createPeerConnection(isInitiator) {
     console.log(`Creating a peer connection as initiator? ${isInitiator}, with config ${this.#configuration}`)
     this.peerConn = new RTCPeerConnection(this.#configuration);
