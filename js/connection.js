@@ -110,7 +110,7 @@ class Peer {
 
       if (count === buf.byteLength) {
         console.log('DONE receive file');
-        this.renderBuf(buf);
+        this.renderPhoto(buf);
       }
     }
   }
