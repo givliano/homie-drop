@@ -1,10 +1,10 @@
-import logError from './utils';
+import { logError } from './utils.js';
 
 /**
  * WebRTC peer connection and data channel
  */
 export default class Peer {
-  constructor() {
+  constructor(isInitiator, peerConn, dataChannel) {
     isInitiator = false;
     peerConn = null;
     dataChannel = null;
