@@ -16,6 +16,10 @@ export default class Peer {
     }]
   };
 
+  setIntiator(isInitiator) {
+    this.isInitiator = isInitiator;
+  }
+
   signalingMessageCallback(message) {
     if (message.type === 'offer') {
       console.log('Got offer. Sending answer to peer.');
@@ -43,8 +47,8 @@ export default class Peer {
     }
   }
 
-  createPeerConnection(isInitiator) {
-    console.log(`Creating a peer connection as initiator? ${isInitiator}, with config ${this.#configuration}`)
+  createPeerConnection() {
+    console.log(`Creating a peer connection as initiator? ${this.isInitiator}, with config ${this.#configuration}`)
     this.peerConn = new RTCPeerConnection(this.#configuration);
     this.peerConn.onicecandidate = this.onIceCandidate;
   }
@@ -63,7 +67,7 @@ export default class Peer {
       console.log('End of icecandidate candidates');
     }
 
-    if (this._isInitiator) {
+    if (this.isInitiator) {
       console.log('Initiator peer creating a new Data Channel.');
       this.dataChannel = this.peerConn.createDataChannel('data-channel');
       this.dataChannel.binaryType = 'arraybuffer';

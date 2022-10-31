@@ -50,13 +50,15 @@ socket.on('ipaddr', function(ipaddr) {
 socket.on('created', function(room, clientId) {
   console.log(`Created room ${room} - my client ID is ${clientId}`);
   isInitiator = true;
+  peer.setIntiator(true);
   grabWebCamVideo();
 });
 
 socket.on('joined', function(room, clientId) {
   console.log(`This peer has joined room ${room}, with cliend ID ${clientId}`);
   isInitiator = false;
-  peer.createPeerConnection(isInitiator);
+  peer.setIntiator(false);
+  peer.createPeerConnection();
   grabWebCamVideo();
 });
 
@@ -68,7 +70,7 @@ socket.on('full', function(room) {
 
 socket.on('ready', function() {
   console.log('Socket is ready');
-  peer.createPeerConnection(isInitiator);
+  peer.createPeerConnection();
 });
 
 socket.on('log', function(array) {
