@@ -182,36 +182,53 @@ export default class Peer {
   async sendPhoto() {
     // Split data in chunks of maximum allowed in the webRTC spec.
     const CHUNK_LEN = 64000;
-    const fileBuffer = await this.files[0].arrayBuffer();
-    const buffer = new Uint8ClampedArray(fileBuffer);
-    const bufferLen = buffer.byteLength;
-    const nChunks = bufferLen / CHUNK_LEN | 0;
+    console.log(this);
+    for (const file of this.files) {
 
-    console.log(`Sending a total of ${bufferLen} byte(s).`);
+      const fileBuffer = await file.arrayBuffer();
+      const buffer = new Uint8ClampedArray(fileBuffer);
+      const bufferLen = buffer.byteLength;
+      const nChunks = bufferLen / CHUNK_LEN | 0;
 
-    if (!this.dataChannel) {
-      logError('Connection has not been initiated. ' + 'Get two peers in the same room first');
-      return;
-    } else if (this.dataChannel.readyState === 'closed') {
-      logError('Connection was lost. Peer closed the connection.');
-      return;
-    }
+      console.log('****');
+      console.log(this.files[0])
+      console.log(fileBuffer);
+      console.log(buffer);
+      // const fileData = {
+        // name: f
+      // }
 
-    // Send first message with file buffer length
-    this.dataChannel.send(bufferLen);
+      console.log(`Sending a total of ${bufferLen} byte(s).`);
 
-    // Send the chunks
-    for (let i = 0; i < nChunks; i++) {
-      const start = i * CHUNK_LEN;
-      const end = (i + 1) * CHUNK_LEN;
-      console.log(start + ' - ' + (end - 1));
-      // Start is inclusive, end is exclusive
-      this.dataChannel.send(buffer.subarray(start, end));
-    }
+      if (!this.dataChannel) {
+        logError('Connection has not been initiated. ' + 'Get two peers in the same room first');
+        return;
+      } else if (this.dataChannel.readyState === 'closed') {
+        logError('Connection was lost. Peer closed the connection.');
+        return;
+      }
 
-    // Send the remainder, if any.
-    if (bufferLen % CHUNK_LEN) {
-      console.log(`Last ${bufferLen % CHUNK_LEN} byte(s)`);
+      // Send first message with file buffer length
+      this.dataChannel.send(JSON.stringify({
+        name: file.name,
+        size: file.size,
+        type: file.type
+      }));
+
+      // Send the chunks
+      for (let i = 0; i < nChunks; i++) {
+        const start = i * CHUNK_LEN;
+        const end = (i + 1) * CHUNK_LEN;
+        console.log(start + ' - ' + (end - 1));
+        // Start is inclusive, end is exclusive
+        this.dataChannel.send(buffer.subarray(start, end));
+      }
+
+      // Send the remainder, if any.
+      if (bufferLen % CHUNK_LEN) {
+        console.log(`Last ${bufferLen % CHUNK_LEN} byte(s)`);
+        this.dataChannel.send(buffer.subarray(n * CHUNK_LEN));
+      }
     }
   }
 
