@@ -20,8 +20,8 @@ let photoContextW;
 let photoContextH;
 
 // Attach event handlers
-snapBtn.addEventListener('click', peer.snapPhoto);
-sendBtn.addEventListener('click', peer.sendPhoto);
+snapBtn.addEventListener('click', () => peer.snapPhoto());
+sendBtn.addEventListener('click', () => peer.sendPhoto());
 snapAndSendBtn.addEventListener('click', snapAndSend);
 
 // Disabled send button by defaul
