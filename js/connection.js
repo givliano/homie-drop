@@ -4,10 +4,11 @@ import { logError } from './utils.js';
  * WebRTC peer connection and data channel
  */
 export default class Peer {
-  constructor(isInitiator, peerConn, dataChannel) {
-    isInitiator = false;
-    peerConn = null;
-    dataChannel = null;
+  constructor() {
+    this.isInitiator = false;
+    this.peerConn = null;
+    this.dataChannel = null;
+    this.files = [];
   }
 
   #configuration = {
@@ -151,10 +152,37 @@ export default class Peer {
     }
   }
 
+  async setFiles(files) {
+    this.files.push(files);
+    await this.handleFiles();
+  }
+
+  async handleFiles(e) {
+    this.files.forEach(file => {
+      const objectURL = window.URL.createObjectURL(file);
+      const img = document.createElement('img');
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      console.log('file', file);
+      canvas.classList.add('image-file', 'img-preview')
+      img.onload = () => {
+        console.log('loaded img', img);
+        ctx.drawImage(
+                      img,
+                      0, 0, img.width, img.height,
+                      0, 0, canvas.width, canvas.height
+        );
+        document.getElementById('preview').appendChild(canvas);
+        window.URL.revokeObjectURL(objectURL);
+      }
+      img.src = objectURL;
+    });
+  }
+
   async sendPhoto() {
     // Split data in chunks of maximum allowed in the webRTC spec.
     const CHUNK_LEN = 64000;
-    const fileBuffer = await imageFiles[0].arrayBuffer();
+    const fileBuffer = await this.files[0].arrayBuffer();
     const buffer = new Uint8ClampedArray(fileBuffer);
     const bufferLen = buffer.byteLength;
     const nChunks = bufferLen / CHUNK_LEN | 0;

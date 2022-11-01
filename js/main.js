@@ -162,72 +162,15 @@ function snapPhoto() {
 }
 
 const input = document.getElementById('input');
-input.addEventListener('change', handleFiles, false);
-var imageFiles = [];
-
-async function handleFiles() {
-  for (const file of this.files) {
+input.addEventListener('change', async function(e) {
+  for (const file of e.target.files) {
     if (!file.type.startsWith('image/')) {
       return;
     }
-    imageFiles.push(file)
-
     console.warn('added files', file);
-    // const img = document.createElement('img');
-    // img.classList.add('obj');
-    // img.file = file;
-
-    // const preview = document.getElementById('preview');
-    // preview.appendChild(img);
-
-    // const reader = new FileReader();
-    // reader.onload = (e) => {
-      // console.log(e);
-      // img.src = e.target.result;
-    // }
-    // To trigger the load event we must use one of the read methods of the FileReader.
-    // reader.readAsDataURL(file);
-
-    // const url = URL.createObjectURL(file);          // create an Object URL
-    // const img = new Image();                         // create a temp. image object
-
-  // img.onload = function() {                    // handle async image loading
-    // URL.revokeObjectURL(this.src);             // free memory held by Object URL
-    // c.getContext("2d").drawImage(this, 0, 0);  // draw image onto canvas (lazy method™)
-  // };
-
-  // img.src = url;
-
-    // const blob = await file.arrayBuffer();
-    // const buf = new TypedArray(blob);
-    // console.log(buf);
-    // console.log(blob);
-    // img = blob;
-    // return blob;
+    await peer.setFiles(file);
   }
-  imageFiles.forEach(file => {
-    const objectURL = window.URL.createObjectURL(file);
-    const img = document.createElement('img');
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    console.log('file', file);
-    canvas.classList.add('image-file', 'img-preview')
-    img.onload = () => {
-      console.log('loaded img', img);
-      ctx.drawImage(
-                    img,
-                    0, 0, img.width, img.height,
-                    0, 0, canvas.width, canvas.height
-      );
-      document.getElementById('preview').appendChild(canvas);
-      window.URL.revokeObjectURL(objectURL);
-    }
-    img.src = objectURL;
-  });
-
-
-}
-
+}, false);
 
 async function snapAndSend() {
   snapPhoto();
