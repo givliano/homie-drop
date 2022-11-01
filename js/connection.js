@@ -147,7 +147,7 @@ export default class Peer {
 
       if (count === buf.byteLength) {
         console.log('DONE receive file');
-        this.renderPhoto(buf);
+        this.getCompleteFile(buf);
       }
     }
   }
