@@ -1,5 +1,9 @@
 'use strict';
 
+/****************************************************************************
+* Static Server
+****************************************************************************/
+
 const os = require('os');
 const nodeStatic = require('node-static');
 const http = require('http');
