@@ -5,16 +5,21 @@
 ****************************************************************************/
 
 const os = require('os');
-const nodeStatic = require('node-static');
 const http = require('http');
+const path = require('path');
 const socketIO = require('socket.io');
+const express = require('express');
+const app = express();
+const server = http.createServer(app);
 
-const fileServer = new(nodeStatic.Server)();
-const app = http.createServer(function(req, res) {
-  fileServer.serve(req, res);
-}).listen(8080);
+server.listen(3000);
+app.use('/', express.static(path.join(__dirname, 'public')));
 
-const io = socketIO.listen(app);
+/****************************************************************************
+* Peer Messaging
+****************************************************************************/
+
+const io = socketIO.listen(server);
 io.sockets.on('connection', function(socket) {
   // Convenience function to log server messages on the client
   function log() {
