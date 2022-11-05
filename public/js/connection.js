@@ -153,13 +153,17 @@ export default class Peer {
   receiveDataFactory() {
     let buf;
     let count;
+    let dataInfo;
 
-    return function onmessage(e) {
+    return (e) => {
       // Sending peer will send the size of the buffer and mime
       // before sending the data.
+      console.log('****** \n ONMESSAGE', e);
       if (typeof e.data === 'string') {
+        dataInfo = JSON.parse(e.data);
+        // {"name":"test.jpeg","size":317873,"type":"image/jpeg"}
         // Create a buffer for the next data.
-        buf = new Uint8ClampedArray(parseInt(e.data));
+        buf = new Uint8ClampedArray(parseInt(dataInfo.size));
         count = 0;
         console.log(`Expecting a total of ${buf.byteLength} bytes`);
         return;
@@ -173,7 +177,8 @@ export default class Peer {
 
       if (count === buf.byteLength) {
         console.log('DONE receive file');
-        this.getCompleteFile(buf);
+        console.log(this);
+        this.getCompleteFile(buf, dataInfo);
       }
     }
   }
@@ -269,10 +274,10 @@ export default class Peer {
     link.remove();
   }
 
-  getCompleteFile(data) {
+  getCompleteFile(data, info) {
     const fileBuffer = new Uint8Array(data);
-    const blob = new Blob([fileBuffer], { type: 'image/jpeg' });
+    const blob = new Blob([fileBuffer], { type: info.type });
 
-    this.downloadFile(blob, 'hello.jpeg');
+    this.downloadFile(blob, info.name);
   }
 }
