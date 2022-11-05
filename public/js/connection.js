@@ -258,7 +258,7 @@ export default class Peer {
       // Send the remainder, if any.
       if (bufferLen % CHUNK_LEN) {
         console.log(`Last ${bufferLen % CHUNK_LEN} byte(s)`);
-        this.dataChannel.send(buffer.subarray(n * CHUNK_LEN));
+        this.dataChannel.send(buffer.subarray(nChunks * CHUNK_LEN));
       }
     }
   }
