@@ -21,7 +21,15 @@ export default class Peer {
     this.isInitiator = isInitiator;
   }
 
-  signalingMessageCallback(message) {
+  /**
+   *
+   * @param {*} message
+   */
+  sendMessage(message) {
+    console.log('Peer sending message:', message);
+    window.socket.emit('message', message);
+  }
+
     if (message.type === 'offer') {
       console.log('Got offer. Sending answer to peer.');
       this.peerConn.setRemoteDescription(
