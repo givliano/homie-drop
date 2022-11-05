@@ -58,25 +58,9 @@ export default class Peer {
     }
   }
 
-  createPeerConnection() {
+  async createPeerConnection() {
     console.log(`Creating a peer connection as initiator? ${this.isInitiator}, with config ${this.#configuration}`)
     this.peerConn = new RTCPeerConnection(this.#configuration);
-    this.peerConn.onicecandidate = this.onIceCandidate;
-  }
-
-  async onIceCandidate(e) {
-    console.log(`icecandidate event: ${e}, looking for candidates.`);
-
-    if (e.candidate) {
-      this.sendMessage({
-        type: 'candidate',
-        label: e.candidate.sdpMLineIndex,
-        id: e.candidate.sdpMid,
-        candidate: e.candidate.candidate
-      });
-    } else {
-      console.log('End of icecandidate candidates');
-    }
 
     if (this.isInitiator) {
       console.log('Initiator peer creating a new Data Channel.');
@@ -89,7 +73,9 @@ export default class Peer {
 
       try {
         const offer = await this.peerConn.createOffer();
-        this.peerConn.setLocalDescription(offer);
+        console.log('created offer', offer);
+        await this.peerConn.setLocalDescription(offer);
+        console.log('sending local description:', this.peerConn.localDescription);
         this.sendMessage(this.peerConn.localDescription);
       } catch (e) {
         logError(e);
@@ -101,6 +87,48 @@ export default class Peer {
 
         this.onDataChannelCreated(this.dataChannel);
       }
+    }
+
+    this.peerConn.onicecandidate = async (e) => {
+      console.log('icecandidate event:',e);
+
+      if (e.candidate) {
+        this.sendMessage({
+          type: 'candidate',
+          label: e.candidate.sdpMLineIndex,
+          id: e.candidate.sdpMid,
+          candidate: e.candidate.candidate
+        });
+      } else {
+        console.log('End of icecandidate candidates');
+      }
+
+      // if (this.isInitiator) {
+      //   console.log('Initiator peer creating a new Data Channel.');
+      //   this.dataChannel = this.peerConn.createDataChannel('data-channel');
+      //   this.dataChannel.binaryType = 'arraybuffer';
+
+      //   this.onDataChannelCreated(this.dataChannel);
+
+      //   console.log('Creating an offer.');
+
+      //   try {
+      //     const offer = await this.peerConn.createOffer();
+      //     console.log('created offer', offer);
+      //     this.peerConn.setLocalDescription(offer);
+      //     console.log('sending local description:', this.peerConn.localDescription);
+      //     this.sendMessage(this.peerConn.localDescription);
+      //   } catch (e) {
+      //     logError(e);
+      //   }
+      // } else {
+      //   this.peerConn.ondatachannel = (e) => {
+      //     console.log('ondatachannel handler', e.channel);
+      //     this.dataChannel = e.channel;
+
+      //     this.onDataChannelCreated(this.dataChannel);
+      //   }
+      // }
     }
   }
 
