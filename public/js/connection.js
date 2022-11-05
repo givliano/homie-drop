@@ -137,14 +137,14 @@ export default class Peer {
 
     dataChannel.onopen = () => {
       console.log(`${dataChannel} channel opened`);
-      sendBtn.disabled = false;
-      snapAndSendBtn.disabled = false;
+      document.getElementById('send').disabled = false;
+      document.getElementById('snapAndSend').disabled = false;
     }
 
     dataChannel.onclose = () => {
       console.log(`${dataChannel} channel closed`);
-      sendBtn.disabled = true;
-      snapAndSendBtn.disabled = true;
+      document.getElementById('send').disabled = true;
+      document.getElementById('snapAndSend').disabled = true;
     }
 
     dataChannel.onmessage = this.receiveDataFactory();
