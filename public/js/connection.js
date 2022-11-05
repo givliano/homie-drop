@@ -30,22 +30,24 @@ export default class Peer {
     window.socket.emit('message', message);
   }
 
+  async signalingMessageCallback(message) {
     if (message.type === 'offer') {
       console.log('Got offer. Sending answer to peer.');
-      this.peerConn.setRemoteDescription(
-        new RTCSessionDescription(message),
-        function() {},
-        logError
-      );
-      this.peerConn.createAnswer(this.onLocalSessionCreated, logError)
+      try {
+        await this.peerConn.setRemoteDescription(message);
+        const answer = await this.peerConn.createAnswer();
+        console.log('Local session created with description:', message);
+        await this.peerConn.setLocalDescription(answer);
+        console.log(`Sending local description: ${this.peerConn.localDescription}`);
+        this.sendMessage(this.peerConn.localDescription);
+      } catch (e) {
+        logError(e);
+      }
     } else if (message.type === 'answer') {
-      console.log('Got anwswer.');
-      this.peerConn.setRemoteDescription(
-        new RTCSessionDescription(message),
-        function() {},
-        logError
-      );
+      console.log('Got answer with message:', message);
+      await this.peerConn.setRemoteDescription(message);
     } else if (message.type === 'candidate') {
+      console.log('Got candidate with message:', message);
       this.peerConn.addIceCandidate(
         new RTCIceCandidate({
           candidate: message.candidate,
@@ -118,18 +120,6 @@ export default class Peer {
     }
 
     dataChannel.onmessage = this.receiveDataFactory();
-  }
-
-  async onLocalSessionCreated(description) {
-    console.log(`Local session created with description: ${description}`);
-
-    try {
-      await this.peerConn.setLocalDescription(description);
-      console.log(`Sending local description: ${this.peerConn.localDescription}`);
-      this.sendMessage(peerConn.localDescription);
-    } catch (e) {
-      logError(e);
-    }
   }
 
   receiveDataFactory() {
