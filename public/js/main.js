@@ -40,7 +40,7 @@ if (!room) {
 ****************************************************************************/
 
 // Connect to the signaling server
-var socket = io.connect();
+var socket = window.socket = io.connect();
 
 socket.on('ipaddr', function(ipaddr) {
   console.log(`Server IP address is: ${ipaddr}`);
