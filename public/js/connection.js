@@ -9,6 +9,8 @@ export default class Peer {
     this.peerConn = null;
     this.dataChannel = null;
     this.files = [];
+    this.queue = [];
+    this.paused = false;
   }
 
   #configuration = {
@@ -183,6 +185,43 @@ export default class Peer {
     });
   }
 
+  send(data) {
+    this.queue.push(data);
+
+    if (this.paused) {
+      return;
+    }
+
+    this.shiftQueue();
+  }
+
+  shiftQueue() {
+    this.paused = false;
+    let message = this.queue.shift();
+
+    while (message) {
+      if (this.dataChannel.bufferedAmount && this.dataChannel.bufferedAmount > 65535) {
+        this.paused = true;
+        this.queue.unshift(message);
+
+        const onBufferedAmountLow = () => {
+          this.dataChannel.removeEventListener('bufferedamountlow', onBufferedAmountLow);
+          this.shiftQueue();
+        }
+
+        this.dataChannel.addEventListener('bufferedamountlow', onBufferedAmountLow);
+        return;
+      }
+
+      try {
+        this.dataChannel.send(message);
+        message = this.queue.shift();
+      } catch (e) {
+        logError(e);
+      }
+    }
+  }
+
   async sendPhoto() {
     // Split data in chunks of maximum allowed in the webRTC spec.
     const CHUNK_LEN = 64000;
@@ -213,7 +252,7 @@ export default class Peer {
       }
 
       // Send first message with file buffer length
-      this.dataChannel.send(JSON.stringify({
+      this.send(JSON.stringify({
         name: file.name,
         size: file.size,
         type: file.type
@@ -225,13 +264,14 @@ export default class Peer {
         const end = (i + 1) * CHUNK_LEN;
         console.log(start + ' - ' + (end - 1));
         // Start is inclusive, end is exclusive
-        this.dataChannel.send(buffer.subarray(start, end));
+        console.log('BUFFERED AMOUNT', this.dataChannel.bufferedAmount);
+        this.send(buffer.subarray(start, end));
       }
 
       // Send the remainder, if any.
       if (bufferLen % CHUNK_LEN) {
         console.log(`Last ${bufferLen % CHUNK_LEN} byte(s)`);
-        this.dataChannel.send(buffer.subarray(nChunks * CHUNK_LEN));
+        this.send(buffer.subarray(nChunks * CHUNK_LEN));
       }
     }
   }
