@@ -164,7 +164,9 @@ function snapPhoto() {
 const input = document.getElementById('input');
 input.addEventListener('change', async function(e) {
   for (const file of e.target.files) {
-    if (!file.type.startsWith('image/')) {
+    console.log(file);
+    if (!(file.type.startsWith('image/') || file.type.startsWith('video/'))) {
+      console.warn('file not supported');
       return;
     }
     console.warn('added files', file);
