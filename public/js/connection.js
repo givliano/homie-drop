@@ -223,8 +223,8 @@ export default class Peer {
   }
 
   async sendPhoto() {
-    // Split data in chunks of maximum allowed in the webRTC spec.
-    const CHUNK_LEN = 64000;
+    // Split data in chunks of maximum allowed in the webRTC spec, 64 KiB.
+    const CHUNK_LEN = 65535;
     console.log(this);
     for (const file of this.files) {
 
