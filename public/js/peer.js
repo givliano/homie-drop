@@ -19,13 +19,19 @@ export default class Peer {
     }]
   };
 
+  /**
+   *
+   * @param {boolean} isInitiator
+   * Sets the app as the one that created the app or as the second client.
+   */
   setIntiator(isInitiator) {
     this.isInitiator = isInitiator;
   }
 
   /**
    *
-   * @param {*} message
+   * @param {string} message
+   * Send the message to the subscribed peers through socket.io.
    */
   sendMessage(message) {
     console.log('Peer sending message:', message);
