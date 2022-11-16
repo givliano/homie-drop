@@ -1,22 +1,23 @@
-import { PHASE_PRODUCTION_BUILD } from 'next/dist/shared/lib/constants';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
-import Peer from '../public/peer.js';
+import Peer from '../public/js/peer';
+
+import { randomToken } from '../public/js/utils';
 
 const peer = new Peer();
-const socket = window.socket = io();
-
-let room = window.location.hash(substring(1));
-if (!room) {
-  room = window.location.hash = randomToken();
-}
+const socket = io();
 
 function HomePage() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [isInitiator, setIsInitiator] = useState(false);
   const [lastPong, setLastPong] = useState(null);
 
-  useState(() => {
+  useEffect(() => {
+    let room = window.location.hash.substring(1);
+    if (!room) {
+      room = window.location.hash = randomToken();
+    }
+
     socket.on('connect', () => {
       setIsConnected(true);
     });
@@ -37,8 +38,8 @@ function HomePage() {
 
     socket.on('joined', (room, clientId) => {
       console.log(`This peer has joined room ${room}, with cliendId ${clientId}`);
-      setIsInitiator = false;
-      peer.setIntiator(false);
+      setIsInitiator(false);
+      peer.setInitiator(false);
       peer.createPeerConnection();
     });
 
@@ -79,6 +80,12 @@ function HomePage() {
       }
     });
 
+      socket.emit('create or join', room);
+
+    if (location.hostname.match(/localhost|127\.0\.0/)) {
+      socket.emit('ipAddr');
+    }
+
     return () => {
       console.log(`Unloading window. Notifying peers in room`);
       socket.emit('bye', room);
@@ -88,11 +95,7 @@ function HomePage() {
     }
   }, []);
 
-  socket.emit('create or join', room);
 
-  if (location.hostname.match(/localhost|127\.0\.0/)) {
-    socket.emit('ipAddr');
-  }
 
   return (
     <div>
@@ -102,7 +105,23 @@ function HomePage() {
         <span>Room URL: </span><span id="url">...</span>
       </h2>
 
-      <input type="file" id="input" multiple />
+      <input
+        type="file"
+        id="input"
+        multiple
+        onChange={async (e) => {
+          for (const file of e.target.files) {
+            console.log(file);
+
+            if (!(file.type.startsWith('image/') || file.type.startsWith('video/'))) {
+              console.warn('file no suppoerted');
+              return;
+            }
+            console.log('added files', file);
+            await peer.setFiles(file);
+          }
+        }}
+      />
       <div id="preview"></div>
 
       <div id="videoCanvas">

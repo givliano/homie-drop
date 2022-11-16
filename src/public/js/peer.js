@@ -24,7 +24,7 @@ export default class Peer {
    * @param {boolean} isInitiator
    * Sets the app as the one that created the app or as the second client.
    */
-  setIntiator(isInitiator) {
+  setInitiator(isInitiator) {
     this.isInitiator = isInitiator;
   }
 
