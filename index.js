@@ -41,7 +41,8 @@ nextApp.prepare().then(async () => {
 
   server.listen(3000);
   app.all('*', (req, res) => nextHandler(req, res));
-  app.use('/', express.static(path.join(__dirname, 'public')));
+  console.log(__dirname + '/src/public');
+  app.use('/', express.static(path.join(__dirname, '/src/public')));
 
   /****************************************************************************
   * Peer Messaging
