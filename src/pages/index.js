@@ -103,8 +103,6 @@ function HomePage() {
     }
   }, []);
 
-
-
   return (
     <div>
       <h1>opendrop</h1>
