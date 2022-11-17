@@ -51,7 +51,7 @@ function HomePage() {
 
     socket.on('ready', () => {
       console.log('Socket is ready');
-      peer.createPeerConnection;
+      peer.createPeerConnection();
     });
 
     socket.on('log', (array) => {
