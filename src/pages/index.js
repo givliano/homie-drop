@@ -26,7 +26,7 @@ function HomePage() {
       setIsConnected(false);
     });
 
-    socket.on('ippaddr', (ipAddr) => {
+    socket.on('ipaddr', (ipAddr) => {
       console.log(`Server IP address is: ${ipAddr}`);
     });
 
