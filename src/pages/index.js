@@ -91,7 +91,15 @@ function HomePage() {
       socket.emit('bye', room);
       socket.off('connect');
       socket.off('disconnect');
-      socket.off('pong');
+      socket.off('ipaddr');
+      socket.off('created');
+      socket.off('joined');
+      socket.off('full');
+      socket.off('ready');
+      socket.off('log');
+      socket.off('message');
+      socket.off('disconnect');
+      socket.off('bye');
     }
   }, []);
 
