@@ -66,8 +66,8 @@ nextApp.prepare().then(async () => {
     socket.on('create or join', function(room) {
       log('Received request to create or join room '+ room);
 
-      const clientsInRoom = io.sockets.adapter.rooms[room];
-      const numClients = clientsInRoom ? clientsInRoom.length : 0;
+      const clientsInRoom = io.sockets.adapter.rooms.get(room);
+      const numClients = clientsInRoom ? clientsInRoom.size : 0;
 
       log(`Room ${room} now has ${numClients + 1} client(s)`);
 
