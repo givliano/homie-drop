@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import io from 'socket.io-client';
 import Peer from '../public/js/peer';
-
 import { randomToken } from '../public/js/utils';
+import socket from '../lib/socket';
 
 const peer = new Peer();
-const socket = io();
 
 function HomePage() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -80,7 +78,7 @@ function HomePage() {
       }
     });
 
-      socket.emit('create or join', room);
+    socket.emit('create or join', room);
 
     if (location.hostname.match(/localhost|127\.0\.0/)) {
       socket.emit('ipAddr');

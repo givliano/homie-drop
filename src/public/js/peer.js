@@ -1,4 +1,5 @@
 import { logError } from './utils.js';
+import socket from '../../lib/socket';
 
 /**
  * WebRTC peer connection and data channel
@@ -35,7 +36,7 @@ export default class Peer {
    */
   sendMessage(message) {
     console.log('Peer sending message:', message);
-    window.socket.emit('message', message);
+    socket.emit('message', message);
   }
 
   async signalingMessageCallback(message) {
