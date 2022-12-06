@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "dev": "node index.js",
+    "dev": "nodemon index.js",
     "build": "next build",
     "start": "NODE_ENV=production node index.js",
     "lint": "next lint"
