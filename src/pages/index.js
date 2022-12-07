@@ -9,6 +9,7 @@ function HomePage() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [isInitiator, setIsInitiator] = useState(false);
   const [lastPong, setLastPong] = useState(null);
+  const [hasFiles, setHasFiles] = useState(false);
 
   useEffect(() => {
     let room = window.location.hash.substring(1);
@@ -101,6 +102,8 @@ function HomePage() {
     }
   }, []);
 
+  useEffect(() => console.log('HAS FILES', hasFiles), [hasFiles]);
+
   const handleChange = async (e) => {
     for (const file of e.target.files) {
       console.log(file);
@@ -112,6 +115,8 @@ function HomePage() {
       console.log('added files', file);
       await peer.setFiles(file);
     }
+
+    setHasFiles(true);
   }
 
   return (
