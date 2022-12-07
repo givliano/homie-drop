@@ -4,7 +4,7 @@ import socket from '../../lib/socket';
 /**
  * WebRTC peer connection and data channel
  */
-export default class Peer {
+class Peer {
   constructor() {
     this.isInitiator = false;
     this.peerConn = null;
@@ -301,3 +301,5 @@ export default class Peer {
     this.downloadFile(blob, info.name);
   }
 }
+
+export const peer = new Peer();

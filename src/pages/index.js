@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import Peer from '../public/js/peer';
 import { randomToken } from '../public/js/utils';
 import socket from '../lib/socket';
 
-const peer = new Peer();
+import { peer } from '../public/js/peer';
 
 function HomePage() {
   const [isConnected, setIsConnected] = useState(socket.connected);
