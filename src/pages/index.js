@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { randomToken } from '../public/js/utils';
+import { randomToken } from '../lib/utils';
 import socket from '../lib/socket';
 
 import { FilePicker } from './FilePicker';
-import { peer } from '../public/js/peer';
+import { peer } from '../lib/peer';
 
 function HomePage() {
   const [isConnected, setIsConnected] = useState(socket.connected);

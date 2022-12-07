@@ -1,4 +1,4 @@
-import { peer } from '../public/js/peer';
+import { peer } from '../lib/peer';
 
 export function FilePicker({ onChange }) {
   return (
