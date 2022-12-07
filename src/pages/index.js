@@ -99,6 +99,7 @@ function HomePage() {
       socket.off('message');
       socket.off('disconnect');
       socket.off('bye');
+      socket.leave(room);
     }
   }, []);
 
