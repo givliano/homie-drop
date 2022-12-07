@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { randomToken } from '../public/js/utils';
 import socket from '../lib/socket';
 
+import { FilePicker } from './FilePicker';
 import { peer } from '../public/js/peer';
 
 function HomePage() {
@@ -100,31 +101,25 @@ function HomePage() {
     }
   }, []);
 
+  const handleChange = async (e) => {
+    for (const file of e.target.files) {
+      console.log(file);
+
+      if (!(file.type.startsWith('image/') || file.type.startsWith('video/'))) {
+        console.warn('file no suppoerted');
+        return;
+      }
+      console.log('added files', file);
+      await peer.setFiles(file);
+    }
+  }
+
   return (
     <div>
       <h1>opendrop</h1>
 
-      <h2>
-        <span>Room URL: </span><span id="url">...</span>
-      </h2>
+      <FilePicker onChange={handleChange} />
 
-      <input
-        type="file"
-        id="input"
-        multiple
-        onChange={async (e) => {
-          for (const file of e.target.files) {
-            console.log(file);
-
-            if (!(file.type.startsWith('image/') || file.type.startsWith('video/'))) {
-              console.warn('file no suppoerted');
-              return;
-            }
-            console.log('added files', file);
-            await peer.setFiles(file);
-          }
-        }}
-      />
       <div id="preview"></div>
 
       <div id="videoCanvas">
