@@ -1,15 +1,49 @@
 body {
+  font-family: Helvetica, Arial, sans-serif;
   background-color: black;
   color: white;
-}
-video {
-  max-width: 100%;
-  width: 320px;
-  /* filter: blur(4px) invert(1) opacity(0.5); */
-  /* filter: hue-rotate(180deg) saturate(200%); */
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .img-preview {
   width: 100px;
   height: 100px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.linkShare {
+  background-color: grey;
+  border-radius: 25px 25px 0 0;
+  width: 70vw;
+  height: 40vh;
+  position: absolute;
+  top: 100vh;
+  transition: transform 200ms ease-in;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.linkShare.active {
+  transform: translate3d(0, -40vh, 0);
+}
+
+.link {
+  color: black;
+  width: 75px;
+  height: 75px;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
