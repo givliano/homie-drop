@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { randomToken } from '../lib/utils';
+import { peer } from '../lib/peer';
 import socket from '../lib/socket';
 
 import { FilePicker } from './FilePicker';
-import { peer } from '../lib/peer';
+import { LinkShare } from './LinkShare';
 
 function HomePage() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -121,26 +122,18 @@ function HomePage() {
   }
 
   return (
-    <div>
+    <div className='container'>
       <h1>opendrop</h1>
 
       <FilePicker onChange={handleChange} />
 
       <div id="preview"></div>
 
-      <div id="videoCanvas">
-        <video id="video" autoPlay playsInline></video>
-        <canvas id="photo"></canvas>
-      </div>
-
       <div id="buttons">
         <button id="send" onClick={() => peer.sendPhoto()}>Send</button>
       </div>
 
-      <div id="incoming">
-        <h2>Incoming photos</h2>
-        <button id="trail"></button>
-      </div>
+      <LinkShare active={hasFiles} />
     </div>
   );
 }
