@@ -127,13 +127,13 @@ function HomePage() {
     <div className='container'>
       <h1>opendrop</h1>
 
-      <FilePicker onChange={handleChange} />
+      {!hasFiles
+        ? <div className='file-wrapper'><FilePicker onChange={handleChange} active='active' /> <FilePreview /></div>
+        : <div className='file-wrapper'><FilePicker onChange={handleChange} /> <FilePreview active='active' /></div>
+      }
 
-      <div id="preview"></div>
-
-      <div id="buttons">
-        <button id="send" onClick={() => peer.sendPhoto()}>Send</button>
-      </div>
+      {hasFiles && <SendButton />}
+      {/* <SendButton /> */}
 
       <LinkShare active={hasFiles} />
     </div>
