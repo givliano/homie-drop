@@ -1,5 +1,3 @@
-import { peer } from '../lib/peer';
-
 export function FilePicker({ onChange }) {
   return (
     <input
