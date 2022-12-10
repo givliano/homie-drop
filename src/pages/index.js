@@ -67,14 +67,14 @@ function HomePage() {
 
     socket.on('disconnect', (reason) => {
       console.log('Disconnected: ', reason);
-      sendBtn.disabled = true;
-      snapAndSendBtn.disabeld = true;
+      // sendBtn.disabled = true;
+      // snapAndSendBtn.disabeld = true;
     });
 
     socket.on('bye', (room) => {
       console.log(`Peer leaving room ${room}`);
-      sendBtn.disabled = true;
-      snapAndSendBtn.disabled = true;
+      // sendBtn.disabled = true;
+      // snapAndSendBtn.disabled = true;
 
       // If peer did not create the room, re-enter to be creator.
       if (!isInitiator) {
