@@ -5,6 +5,8 @@ import socket from '../lib/socket';
 
 import { FilePicker } from './FilePicker';
 import { LinkShare } from './LinkShare';
+import { SendButton }from './SendButton';
+import { FilePreview } from './FilePreview';
 
 function HomePage() {
   const [isConnected, setIsConnected] = useState(socket.connected);
