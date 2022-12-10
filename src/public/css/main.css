@@ -43,6 +43,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  transform: translate3d(0, -40vh, 0);
 }
 
 .linkShare.active {
