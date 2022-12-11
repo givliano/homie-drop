@@ -108,7 +108,7 @@ function HomePage() {
 
   useEffect(() => console.log('HAS FILES', hasFiles), [hasFiles]);
 
-  const handleChange = async (e) => {
+  const handleInputChange = async (e) => {
     for (const file of e.target.files) {
 
       if (!(file.type.startsWith('image/') || file.type.startsWith('video/'))) {
