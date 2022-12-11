@@ -112,7 +112,7 @@ function HomePage() {
     for (const file of e.target.files) {
 
       if (!(file.type.startsWith('image/') || file.type.startsWith('video/'))) {
-        console.warn('file no suppoerted');
+        console.warn('File not supported: only images and videos can be shared.');
         return;
       }
 

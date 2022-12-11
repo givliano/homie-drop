@@ -200,6 +200,8 @@ class Peer {
     img.src = objectURL;
   }
 
+  // Add data to the queue and send it to the peer if not paused.
+  // Otherwise cache it and wait for the buffer to be low.
   send(data) {
     this.queue.push(data);
 
