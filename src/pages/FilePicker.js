@@ -1,8 +1,8 @@
-export function FilePicker({ onChange }) {
+export function FilePicker({ onChange, active='' }) {
   return (
-    <div className="file-picker__wrapper">
+    <div className={`file-picker__wrapper ${active}`}>
       <div className="file-picker__info-container">
-        <p className="file-picker__info-text">Drag your photos or videos here</p>
+        <p className="file-picker__info-text">Drag your photos and videos here</p>
         <p className="file-picker__info-text">Or click on this area</p>
       </div>
       <input

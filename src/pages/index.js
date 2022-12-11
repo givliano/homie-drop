@@ -127,8 +127,8 @@ function HomePage() {
       <h1>opendrop</h1>
 
       {!hasFiles
-        ? <div className='file-wrapper'><FilePicker onChange={handleChange} active='active' /> <FilePreview /></div>
-        : <div className='file-wrapper'><FilePicker onChange={handleChange} /> <FilePreview active='active' /></div>
+        ? <div className='file-wrapper'><FilePreview /><FilePicker onChange={handleInputChange} active='active' /> </div>
+        : <div className='file-wrapper'><FilePreview active='active' /><FilePicker onChange={handleInputChange} /> </div>
       }
 
       {hasFiles && <SendButton />}
