@@ -1,3 +1,5 @@
+import { peer } from '../lib/peer';
+
 export const SendButton = () => {
   return (
     <div>
