@@ -3,10 +3,9 @@ import { randomToken } from '../lib/utils';
 import { peer } from '../lib/peer';
 import socket from '../lib/socket';
 
-import { FilePicker } from './FilePicker';
 import { LinkShare } from './LinkShare';
 import { SendButton }from './SendButton';
-import { FilePreview } from './FilePreview';
+import { FileSwitcher } from './FileSwitcher';
 
 function HomePage() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -126,10 +125,7 @@ function HomePage() {
     <div className='container'>
       <h1>opendrop</h1>
 
-      {!hasFiles
-        ? <div className='file-wrapper'><FilePreview /><FilePicker onChange={handleInputChange} active='active' /> </div>
-        : <div className='file-wrapper'><FilePreview active='active' /><FilePicker onChange={handleInputChange} /> </div>
-      }
+      <FileSwitcher hasFiles={hasFiles} onChange={handleInputChange} />
 
       {hasFiles && <SendButton />}
       {/* <SendButton /> */}
