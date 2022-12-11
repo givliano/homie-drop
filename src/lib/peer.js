@@ -119,14 +119,10 @@ class Peer {
 
     dataChannel.onopen = () => {
       console.log(`${dataChannel} channel opened`);
-      // document.getElementById('send').disabled = false;
-      // document.getElementById('snapAndSend').disabled = false;
     }
 
     dataChannel.onclose = () => {
       console.log(`${dataChannel} channel closed`);
-      // document.getElementById('send').disabled = true;
-      // document.getElementById('snapAndSend').disabled = true;
     }
 
     dataChannel.onmessage = this.receiveDataFactory();
@@ -143,7 +139,6 @@ class Peer {
       console.log('****** \n ONMESSAGE', e);
       if (typeof e.data === 'string') {
         dataInfo = JSON.parse(e.data);
-        // {"name":"test.jpeg","size":317873,"type":"image/jpeg"}
         // Create a buffer for the next data.
         buf = new Uint8ClampedArray(parseInt(dataInfo.size));
         count = 0;
@@ -232,21 +227,12 @@ class Peer {
   async sendPhoto() {
     // Split data in chunks of maximum allowed in the webRTC spec, 64 KiB.
     const CHUNK_LEN = 65535;
-    console.log(this);
     for (const file of this.files) {
 
       const fileBuffer = await file.arrayBuffer();
       const buffer = new Uint8ClampedArray(fileBuffer);
       const bufferLen = buffer.byteLength;
       const nChunks = bufferLen / CHUNK_LEN | 0;
-
-      console.log('****');
-      console.log(this.files[0])
-      console.log(fileBuffer);
-      console.log(buffer);
-      // const fileData = {
-        // name: f
-      // }
 
       console.log(`Sending a total of ${bufferLen} byte(s).`);
 

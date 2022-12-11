@@ -110,13 +110,12 @@ function HomePage() {
 
   const handleChange = async (e) => {
     for (const file of e.target.files) {
-      console.log(file);
 
       if (!(file.type.startsWith('image/') || file.type.startsWith('video/'))) {
         console.warn('file no suppoerted');
         return;
       }
-      console.log('added files', file);
+
       await peer.setFiles(file);
     }
 
