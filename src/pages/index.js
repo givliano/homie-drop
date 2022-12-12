@@ -12,6 +12,7 @@ function HomePage() {
   const [isInitiator, setIsInitiator] = useState(false);
   const [lastPong, setLastPong] = useState(null);
   const [hasFiles, setHasFiles] = useState(false);
+  const [moreThanThreeFiles, setMoreThanThreeFiles] = useState(false);
 
   useEffect(() => {
     let room = window.location.hash.substring(1);
@@ -119,13 +120,31 @@ function HomePage() {
     }
 
     setHasFiles(true);
+
+    if (e.target.files.length > 2) {
+      setMoreThanThreeFiles(true);
+    }
+
+    // window.previewContainer = document.getElementById('preview');
+    // window.foo = document.querySelector('.link-text');
+
+    // window.previewStyle = window.getComputedStyle(previewContainer);
+    // window.cssTransformMatrix = new WebKitCSSMatrix(previewStyle.transform);
+    // window.xTransform = cssTransformMatrix.m41;
   }
+
+    if (typeof window !== 'undefined') {
+      // window.foo = document.querySelector('.link-text');
+      // window.previewStyle = window.getComputedStyle(foo);
+      // window.cssTransformMatrix = new WebKitCSSMatrix(previewStyle.transform);
+      // window.xTransform = cssTransformMatrix.m41;
+    }
 
   return (
     <div className='container'>
       <h1>opendrop</h1>
 
-      <FileSwitcher hasFiles={hasFiles} onChange={handleInputChange} />
+      <FileSwitcher hasFiles={hasFiles} onChange={handleInputChange} multipleFiles={moreThanThreeFiles} />
 
       {hasFiles && <SendButton />}
       {/* <SendButton /> */}

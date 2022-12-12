@@ -68,6 +68,7 @@ h1 {
 }
 
 .link-text {
+  transform: translate3d(10px, 0, 0);
   text-align: center;
 }
 
@@ -118,6 +119,7 @@ h1 {
   opacity: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
   transition: opacity 300ms ease-in;
 }
 
@@ -131,8 +133,8 @@ h1 {
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  /* justify-content: center; */
+  transform: translate3d(90px, 0, 0);
 }
 
 /* // SEND BUTTON */

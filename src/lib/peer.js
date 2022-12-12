@@ -242,7 +242,11 @@ class Peer {
   async sendPhoto() {
     // Split data in chunks of maximum allowed in the webRTC spec, 64 KiB.
     const CHUNK_LEN = 65535;
-    for (const file of this.files) {
+    const previewContainer = document.getElementById('preview');
+    // const filesLength = this.files.length
+    this.files.forEach(async (file, i) => {
+      console.log('*******************\n', i);
+      const isLastElement = (i === this.files.length - 1);
 
       const fileBuffer = await file.arrayBuffer();
       const buffer = new Uint8ClampedArray(fileBuffer);
@@ -281,7 +285,14 @@ class Peer {
         console.log(`Last ${bufferLen % CHUNK_LEN} byte(s)`);
         this.send(buffer.subarray(nChunks * CHUNK_LEN));
       }
-    }
+
+      if (!isLastElement) {
+        const previewStyle = window.getComputedStyle(previewContainer);
+        const cssTransformMatrix = new WebKitCSSMatrix(previewStyle.transform);
+        cssTransformMatrix.translateSelf(-120, 0, 0);
+        previewContainer.style.transform = cssTransformMatrix;
+      }
+    });
   }
 
   downloadFile(blob, fileName) {

@@ -1,7 +1,9 @@
-export const FilePreview = ({ active = '' }) => {
+export const FilePreview = ({ active = '', multipleFiles }) => {
+  const adjustWrapper = multipleFiles ? 'adjust-wrapper' : '';
+
   return (
-    <div className={`file-preview__wrapper ${active}`}>
-      <div id='preview'></div>
+    <div className={`file-preview__wrapper ${active} ${adjustWrapper}`}>
+      <div id='preview' className={adjustWrapper}></div>
     </div>
-  )
+  );
 }
