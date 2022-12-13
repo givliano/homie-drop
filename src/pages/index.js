@@ -3,9 +3,10 @@ import { randomToken } from '../lib/utils';
 import { peer } from '../lib/peer';
 import socket from '../lib/socket';
 
-import { LinkShare } from './LinkShare';
-import { SendButton }from './SendButton';
-import { FileSwitcher } from './FileSwitcher';
+import { LinkShare } from '../components/LinkShare';
+import { SendButton }from '../components/SendButton';
+import { FileSwitcher } from '../components/FileSwitcher';
+import Script from 'next/script'
 
 function HomePage() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -142,6 +143,8 @@ function HomePage() {
 
   return (
     <div className='container'>
+      <Script src="/scripts/kjua.min.js" onLoad={() => console.log('loaded kjua')} />
+      {/* <p>{kjua}</p> */}
       <h1>opendrop</h1>
 
       <FileSwitcher hasFiles={hasFiles} onChange={handleInputChange} multipleFiles={moreThanThreeFiles} />

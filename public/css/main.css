@@ -12,8 +12,8 @@ html {
 
 body {
   font-family: Helvetica, Arial, sans-serif;
-  background: linear-gradient(45deg,#000BF5 80%,#f606E0);
-  color: white;
+  background-color: #1D1F42;
+  color: #EBE8FF;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
@@ -39,16 +39,16 @@ h1 {
 }
 
 .linkShare {
-  background-color: grey;
+  background-color: transparent;
   border-radius: 25px 25px 0 0;
-  width: 70vw;
+  width: 300px;
   height: 40vh;
   position: absolute;
   top: 100vh;
   transition: transform 200ms ease-out;
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-around;
   transform: translate3d(0, -40vh, 0);
 }
 

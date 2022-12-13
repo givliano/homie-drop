@@ -156,6 +156,7 @@ class Peer {
         console.log('DONE receive file');
         console.log(this);
         this.getCompleteFile(buf, dataInfo);
+
       }
     }
   }
@@ -197,6 +198,15 @@ class Peer {
 
       document.getElementById('preview').appendChild(canvas);
       window.URL.revokeObjectURL(objectURL);
+
+
+      const previewContainer = document.getElementById('preview');
+
+      // window.previewStyle = window.getComputedStyle(previewContainer);
+      // window.cssTransformMatrix = new WebKitCSSMatrix(previewStyle.transform);
+      // window.xTransform = cssTransformMatrix.m41;
+      // window.cssTransformMatrix.translateSelf(-120, 0, 0);
+      // previewContainer.style.transform = window.cssTransformMatrix;
     }
 
     img.src = objectURL;

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { QrCode } from './QrCode'
 
+
 export function LinkShare({ active }) {
   const [qrCode, setQrCode] = useState(false);
 
@@ -29,6 +30,7 @@ export function LinkShare({ active }) {
   return (
     <div className={`linkShare ${active === true ? 'active' : ''}`}>
       {qrCode && <QrCode />}
+      {/* <p>{kjua}</p> */}
       <button className='link url' onClick={() => handleClick()}>
         <span className='link-text'>
           <svg xmlns='http://www.w3.org/2000/svg' height='48' width='48'>
