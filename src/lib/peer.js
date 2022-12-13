@@ -176,7 +176,9 @@ class Peer {
     canvas.height = 100 * window.devicePixelRatio;
     const ctx = canvas.getContext('2d')
 
-    canvas.classList.add('img-preview')
+    console.log(file);
+    canvas.classList.add('img-preview');
+    canvas.dataset.id = file.name;
 
     img.onload = () => {
       // After img is loaded and has it's size properties,

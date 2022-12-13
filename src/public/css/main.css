@@ -12,7 +12,7 @@ html {
 
 body {
   font-family: Helvetica, Arial, sans-serif;
-  background-color: black;
+  background: linear-gradient(45deg,#000BF5 80%,#f606E0);
   color: white;
   width: 100vw;
   height: 100vh;
@@ -68,7 +68,6 @@ h1 {
 }
 
 .link-text {
-  transform: translate3d(10px, 0, 0);
   text-align: center;
 }
 
