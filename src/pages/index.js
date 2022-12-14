@@ -6,7 +6,8 @@ import socket from '../lib/socket';
 import { LinkShare } from '../components/LinkShare';
 import { SendButton }from '../components/SendButton';
 import { FileSwitcher } from '../components/FileSwitcher';
-import Script from 'next/script'
+import { QrModal } from '../components/QrModal';
+import QRCode from 'qrcode'
 
 function HomePage() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -14,6 +15,7 @@ function HomePage() {
   const [lastPong, setLastPong] = useState(null);
   const [hasFiles, setHasFiles] = useState(false);
   const [moreThanThreeFiles, setMoreThanThreeFiles] = useState(false);
+  // const [qrCode, setQrCode] = useState(null);
 
   useEffect(() => {
     let room = window.location.hash.substring(1);
@@ -109,6 +111,25 @@ function HomePage() {
 
   useEffect(() => console.log('HAS FILES', hasFiles), [hasFiles]);
 
+  const [qrCode, setQrCode] = useState();
+
+  useEffect(() => {
+    const url = window.location.href;
+
+    const getQr = async (text) => {
+      const qrCodeImage = await QRCode.toDataURL(text, { errorCorrectionLevel: 'H' });
+      setQrCode(qrCodeImage);
+    }
+
+    getQr(url);
+  }, []);
+
+  const [renderQrCode, setRenderQrCode] = useState();
+
+  const handleQrRender = () => {
+    setRenderQrCode(true);
+  }
+
   const handleInputChange = async (e) => {
     for (const file of e.target.files) {
 
@@ -125,26 +146,10 @@ function HomePage() {
     if (e.target.files.length > 2) {
       setMoreThanThreeFiles(true);
     }
-
-    // window.previewContainer = document.getElementById('preview');
-    // window.foo = document.querySelector('.link-text');
-
-    // window.previewStyle = window.getComputedStyle(previewContainer);
-    // window.cssTransformMatrix = new WebKitCSSMatrix(previewStyle.transform);
-    // window.xTransform = cssTransformMatrix.m41;
   }
-
-    if (typeof window !== 'undefined') {
-      // window.foo = document.querySelector('.link-text');
-      // window.previewStyle = window.getComputedStyle(foo);
-      // window.cssTransformMatrix = new WebKitCSSMatrix(previewStyle.transform);
-      // window.xTransform = cssTransformMatrix.m41;
-    }
 
   return (
     <div className='container'>
-      <Script src="/scripts/kjua.min.js" onLoad={() => console.log('loaded kjua')} />
-      {/* <p>{kjua}</p> */}
       <h1>opendrop</h1>
 
       <FileSwitcher hasFiles={hasFiles} onChange={handleInputChange} multipleFiles={moreThanThreeFiles} />
@@ -152,7 +157,9 @@ function HomePage() {
       {hasFiles && <SendButton />}
       {/* <SendButton /> */}
 
-      <LinkShare active={hasFiles} />
+      <LinkShare active={hasFiles} onClick={handleQrRender} />
+
+      {renderQrCode && qrCode && <QrModal img={qrCode}/>}
     </div>
   );
 }
