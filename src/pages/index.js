@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { randomToken } from '../lib/utils';
 import { peer } from '../lib/peer';
 import socket from '../lib/socket';
@@ -124,10 +124,15 @@ function HomePage() {
     getQr(url);
   }, []);
 
-  const [renderQrCode, setRenderQrCode] = useState();
+  const [renderQrCode, setRenderQrCode] = useState(false);
 
   const handleQrRender = () => {
-    setRenderQrCode(true);
+    console.log(renderQrCode)
+    if (renderQrCode === false) {
+      setRenderQrCode(true);
+    } else {
+      setRenderQrCode(false)
+    }
   }
 
   const handleInputChange = async (e) => {
@@ -148,18 +153,37 @@ function HomePage() {
     }
   }
 
+  const modal = useRef();
+
+  const handleModalClick = () => {
+    modal.current.classList.remove('active');
+    // setQrCode(false);
+    handleQrRender();
+  }
+
   return (
-    <div className='container'>
-      <h1>opendrop</h1>
+    <div className="wrapper">
+      <div className={`container ${renderQrCode ? 'blur' : ''}`}>
+        <div className={`bg-filter ${renderQrCode ? 'active' : ''}`} onClick={handleModalClick} ref={modal}></div>
+        <h1>opendrop</h1>
 
-      <FileSwitcher hasFiles={hasFiles} onChange={handleInputChange} multipleFiles={moreThanThreeFiles} />
+        <FileSwitcher hasFiles={hasFiles} onChange={handleInputChange} multipleFiles={moreThanThreeFiles} />
 
-      {hasFiles && <SendButton />}
-      {/* <SendButton /> */}
+        {hasFiles && <SendButton />}
+        {/* <SendButton /> */}
 
-      <LinkShare active={hasFiles} onClick={handleQrRender} />
+        <div className="svg-wrapper">
+          <svg viewbox="0 0 100 100">
+            <circle cx="50" cy="50" r="20" stroke-width="1" fill="none" />
+            <circle cx="50" cy="50" r="30" stroke-width="1" fill="none" />
+            <circle cx="50" cy="50" r="40" stroke-width="1" fill="none" />
+          </svg>
+        </div>
 
-      {renderQrCode && qrCode && <QrModal img={qrCode}/>}
+
+        <LinkShare active={hasFiles} onClick={handleQrRender} blur={renderQrCode ? 'blur' : ''} />
+      </div>
+      <QrModal img={qrCode} active={renderQrCode && qrCode ? 'active' : ''} />
     </div>
   );
 }

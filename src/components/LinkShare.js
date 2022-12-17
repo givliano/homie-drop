@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export function LinkShare({ active, onClick }) {
+export function LinkShare({ active, onClick, blur }) {
   let url;
 
   if (typeof window !== 'undefined') {
@@ -15,7 +15,7 @@ export function LinkShare({ active, onClick }) {
   }
 
   return (
-    <div className={`linkShare ${active === true ? 'active' : ''}`}>
+    <div className={`linkShare ${active ? 'active' : ''} ${blur}`}>
       <button className='link url' onClick={() => handleClick()}>
         <span className='link-text'>
           <svg xmlns='http://www.w3.org/2000/svg' height='48' width='48'>
