@@ -81,10 +81,20 @@ h1 {
 .file-wrapper {
   width: 300px;
   height: 200px;
-  border: 4px dashed #fff;
+  /* border: 4px dashed #fff; */
   position: relative;
   margin-bottom: 3rem;
 }
+svg { overflow: visible; }
+/* #maskReveal {
+  fill: none;
+  stroke-width: 4;
+  stroke-dasharray: 10, 8;
+  stroke: black;
+  stroke-dashoffset: 0;
+  stroke-linecap: round;
+  stroke-miterlimit: 0;
+} */
 
 /* FILE PICKER */
 .file-picker__wrapper {
@@ -147,6 +157,11 @@ h1 {
 .svg-wrapper {
   width: 100px;
   height: 100px;
+  stroke: #EBE8FF;
+}
+
+.svg-wrapper.connected {
+  stroke: #8501FA;
 }
 
 /* // SEND BUTTON */
