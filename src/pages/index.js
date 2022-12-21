@@ -167,7 +167,12 @@ function HomePage() {
         <div className={`bg-filter ${renderQrCode ? 'active' : ''}`} onClick={handleModalClick} ref={modal}></div>
         <h1>opendrop</h1>
 
-        <FileSwitcher hasFiles={hasFiles} onChange={handleInputChange} multipleFiles={moreThanThreeFiles} />
+        <div className="media">
+          <Rect />
+          <div className="file-wrapper">
+            <FileSwitcher hasFiles={hasFiles} onChange={handleInputChange} multipleFiles={moreThanThreeFiles} />
+          </div>
+        </div>
 
         {hasFiles && <SendButton />}
         {/* <SendButton /> */}
