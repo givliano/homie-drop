@@ -102,7 +102,7 @@ h1 {
   stroke: #fff;
   stroke-dasharray: 1000;
   stroke-dashoffset: 1000;
-  animation: revealRect 1500ms 100ms linear forwards;
+  animation: revealRect 1500ms linear forwards;
 }
 
 #dashed-path {
@@ -116,6 +116,7 @@ h1 {
   stroke: #F606E0;
   stroke-dasharray: 15, 10;
   stroke-dashoffset: 7;
+  animation: changeColor 1500ms linear forwards;
 }
 
 #dashed-path-3{
@@ -263,11 +264,23 @@ h1 {
 @keyframes revealRect {
   0% {
     stroke-dashoffset: 1000;
-    stroke: #000BF5;
   }
 
   100% {
     stroke-dashoffset: 0;
-    stroke: #5cceee;
+  }
+}
+
+@keyframes changeColor {
+  0% {
+    stroke: #000BF5;
+  }
+
+  50% {
+    stroke: #8501FA;
+  }
+
+  100% {
+    stroke: #F606E0;
   }
 }
