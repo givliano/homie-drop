@@ -1,5 +1,5 @@
 import { logError } from './utils.js';
-import socket from './socket';
+import { socket } from './socket';
 
 /**
  * WebRTC peer connection and data channel
