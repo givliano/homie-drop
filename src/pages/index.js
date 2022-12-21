@@ -7,7 +7,6 @@ import { SendButton }from '../components/SendButton';
 import { FileSwitcher } from '../components/FileSwitcher';
 import { QrModal } from '../components/QrModal';
 import { Rect } from '../components/Rect';
-import QRCode from 'qrcode'
 import { initSocket } from '../lib/initSocket';
 
 function HomePage() {
@@ -15,24 +14,12 @@ function HomePage() {
   const [isInitiator, setIsInitiator] = useState(false);
   const [hasFiles, setHasFiles] = useState(false);
   const [moreThanThreeFiles, setMoreThanThreeFiles] = useState(false);
-  const [qrCode, setQrCode] = useState();
   const [renderQrCode, setRenderQrCode] = useState(false);
   const modal = useRef();
 
   useEffect(() => {
     const useSocket = initSocket(setIsConnected, setIsInitiator, isInitiator);
     return useSocket;
-  }, []);
-
-  useEffect(() => {
-    const url = window.location.href;
-
-    const getQr = async (text) => {
-      const qrCodeImage = await QRCode.toDataURL(text, { errorCorrectionLevel: 'H' });
-      setQrCode(qrCodeImage);
-    }
-
-    getQr(url);
   }, []);
 
   const handleQrRender = () => {
@@ -83,7 +70,7 @@ function HomePage() {
 
         <LinkShare active={hasFiles} onClick={handleQrRender} />
       </div>
-      <QrModal img={qrCode} active={renderQrCode && qrCode ? 'active' : ''} />
+      <QrModal active={renderQrCode ? 'active' : ''} />
     </div>
   );
 }
