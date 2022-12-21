@@ -10,10 +10,20 @@ html {
   box-sizing: border-box;
 }
 
+:root {
+  --blue: #000bf5;
+  --purple: #8501fa;
+  --magenta: #f606e0;
+  --cyan: #5cceee;
+  --dark-purple: #2e326b;
+  --dark-grey: #1d1f42;
+  --light-grey: #ebe8ff;
+}
+
 body {
   font-family: Helvetica, Arial, sans-serif;
-  background-color: #1D1F42;
-  color: #EBE8FF;
+  background-color: var(--dark-grey);
+  color: var(--light-grey);
   width: 100vw;
   height: 100vh;
   overflow: hidden;
@@ -43,10 +53,8 @@ h1 {
   background-color: transparent;
   border-radius: 25px 25px 0 0;
   width: 300px;
-  /* Has to be a bit bigger because the blur makes it a bit transparent at the edge */
-  height: 42vh;
-  /* z-index: 10; */
-  background-color: #1D1F42;
+  height: 40vh;
+  background-color: var(--dark-grey);
   transition: transform 200ms ease-out;
   display: flex;
   align-items: center;
@@ -67,6 +75,11 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
+  border-color: var(--blue);
+}
+
+.link:active {
+  border-color: var(--purple);
 }
 
 .link-text {
@@ -106,27 +119,27 @@ h1 {
 }
 
 #dashed-path {
-  stroke: #5cceee;
+  stroke: var(--cyan);
   stroke-dasharray: 1000;
   stroke-dashoffset: 1000;
   opacity: 0;
 }
 
 #dashed-path-2 {
-  stroke: #F606E0;
+  stroke: var(--magenta);
   stroke-dasharray: 15, 10;
   stroke-dashoffset: 7;
   animation: changeColor 1500ms linear forwards;
 }
 
 #dashed-path-3{
-  stroke: #8501FA;
+  stroke: var(--purple);
   stroke-dasharray: 15, 10;
   stroke-dashoffset: 7;
 }
 
 #dashed-path-4 {
-  stroke: #000BF5;
+  stroke: var(--blue);
   stroke-dasharray: 15, 10;
   stroke-dashoffset: 7;
 }
@@ -184,14 +197,13 @@ h1 {
   height: 100%;
   display: flex;
   align-items: center;
-  /* justify-content: center; */
   transform: translate3d(90px, 0, 0);
 }
 
 /* // SEND BUTTON */
 .send-button {
   background-color: transparent;
-  color: #efefef;
+  color: var(--light-grey);
   border-radius: 4px;
   width: 300px;
   height: 30px;
@@ -199,8 +211,8 @@ h1 {
 }
 
 .send-button:hover {
-  color: green;
-  background-color: #efefef;
+  color: var(--magenta);
+  background-color: var(--light-grey);
 }
 
 .modal-wrapper {
@@ -273,14 +285,14 @@ h1 {
 
 @keyframes changeColor {
   0% {
-    stroke: #000BF5;
+    stroke: var(--blue);
   }
 
   50% {
-    stroke: #8501FA;
+    stroke: var(--purple);
   }
 
   100% {
-    stroke: #F606E0;
+    stroke: var(--magenta);
   }
 }
