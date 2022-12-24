@@ -14,5 +14,9 @@
     "socket.io": "^4.5.3",
     "socket.io-client": "^4.5.3"
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "eslint": "8.30.0",
+    "eslint-config-next": "13.1.1"
+  }
 }
