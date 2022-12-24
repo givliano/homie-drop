@@ -23,11 +23,7 @@ function HomePage() {
   }, []);
 
   const handleQrRender = () => {
-    if (renderQrCode === false) {
-      setRenderQrCode(true);
-    } else {
-      setRenderQrCode(false)
-    }
+    (renderQrCode === false) ? setRenderQrCode(true) : setRenderQrCode(false);
   }
 
   const handleInputChange = async (e) => {
