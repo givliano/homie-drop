@@ -6,21 +6,19 @@ const Rect = () => {
   const maskRect = useRef(null);
   const pinkRect = useRef(null);
 
-  const dashLength = 1000;
-
-    function animatePath(el, distance) {
-      if (el !== null) {
-        animate({
-          duration: 200,
-          timing(timeFraction) {
-            return timeFraction;
-          },
-          draw(progress) {
-            el.style.strokeDashoffset = (-1000 - (progress * distance));
-          }
-        });
-      }
+  function animatePath(el, distance) {
+    if (el !== null) {
+      animate({
+        duration: 200,
+        timing(timeFraction) {
+          return timeFraction;
+        },
+        draw(progress) {
+          el.style.strokeDashoffset = (-1000 - (progress * distance));
+        }
+      });
     }
+  }
 
     if (typeof window !== 'undefined') {
       useEffect(() => {

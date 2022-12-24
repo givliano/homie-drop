@@ -191,9 +191,9 @@ class Peer {
       const yCenterShift = (canvas.height - img.height * ratio) / 2;
 
       ctx.drawImage(
-                    img,
-                    0, 0, img.width, img.height,
-                    xCenterShift, yCenterShift, img.width * ratio, img.height * ratio
+        img,
+        0, 0, img.width, img.height,
+        xCenterShift, yCenterShift, img.width * ratio, img.height * ratio
       );
 
       document.getElementById('preview').appendChild(canvas);
