@@ -20,15 +20,12 @@ const Rect = () => {
     }
   }
 
-    if (typeof window !== 'undefined') {
-      useEffect(() => {
-
-        setTimeout(() => {
-          blueRect.current.style.opacity = 1;
-          animatePath(blueRect.current, 500);
-        }, 2000);
-      }, [])
-    }
+  useEffect(() => {
+    setTimeout(() => {
+      blueRect.current.style.opacity = 1;
+      animatePath(blueRect.current, 500);
+    }, 2000);
+  }, [])
 
   return (
     <svg xmlns="http://www.w3.org/2000/svg" className="rect" viewBox="0 0 300 200">
