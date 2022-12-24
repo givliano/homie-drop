@@ -153,10 +153,7 @@ class Peer {
       console.log(`Received data count: ${count}`);
 
       if (count === buf.byteLength) {
-        console.log('DONE receive file');
-        console.log(this);
         this.getCompleteFile(buf, dataInfo);
-
       }
     }
   }
@@ -246,9 +243,8 @@ class Peer {
     // Split data in chunks of maximum allowed in the webRTC spec, 64 KiB.
     const CHUNK_LEN = 65535;
     const previewContainer = document.getElementById('preview');
-    // const filesLength = this.files.length
+
     this.files.forEach(async (file, i) => {
-      console.log('*******************\n', i);
       const isLastElement = (i === this.files.length - 1);
 
       const fileBuffer = await file.arrayBuffer();
@@ -277,9 +273,7 @@ class Peer {
       for (let i = 0; i < nChunks; i++) {
         const start = i * CHUNK_LEN;
         const end = (i + 1) * CHUNK_LEN;
-        console.log(start + ' - ' + (end - 1));
         // Start is inclusive, end is exclusive
-        console.log('BUFFERED AMOUNT', this.dataChannel.bufferedAmount);
         this.send(buffer.subarray(start, end));
       }
 
