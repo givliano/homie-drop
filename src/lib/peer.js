@@ -163,43 +163,6 @@ class Peer {
     await this.createFilePreview(file);
   }
 
-  async createFilePreview(file) {
-    const objectURL = window.URL.createObjectURL(file);
-    const img = document.createElement('img');
-    const canvas = document.createElement('canvas');
-    // Using the devicePixelRatio to make images sharp on Retina displays.
-    canvas.style.width = '100px';
-    canvas.style.height = '100px';
-    canvas.width = 100 * window.devicePixelRatio;
-    canvas.height = 100 * window.devicePixelRatio;
-    const ctx = canvas.getContext('2d')
-
-    console.log(file);
-    canvas.classList.add('img-preview');
-    canvas.dataset.id = file.name;
-
-    img.onload = () => {
-      // After img is loaded and has it's size properties,
-      // calculate its position inside the canvas maintaining its aspect ratio.
-      const hRatio = canvas.width / img.width;
-      const vRatio =  canvas.height / img.height;
-      const ratio = Math.min(hRatio, vRatio);
-      const xCenterShift = (canvas.width - img.width * ratio) / 2;
-      const yCenterShift = (canvas.height - img.height * ratio) / 2;
-
-      ctx.drawImage(
-        img,
-        0, 0, img.width, img.height,
-        xCenterShift, yCenterShift, img.width * ratio, img.height * ratio
-      );
-
-      document.getElementById('preview').appendChild(canvas);
-      window.URL.revokeObjectURL(objectURL);
-    }
-
-    img.src = objectURL;
-  }
-
   // Add data to the queue and send it to the peer if not paused.
   // Otherwise cache it and wait for the buffer to be low.
   send(data) {
