@@ -246,6 +246,7 @@ class Peer {
         this.send(buffer.subarray(nChunks * CHUNK_LEN));
       }
 
+      // Advance the file preview container to center the download item in the middle.
       if (!isLastElement) {
         const previewStyle = window.getComputedStyle(previewContainer);
         const cssTransformMatrix = new WebKitCSSMatrix(previewStyle.transform);
