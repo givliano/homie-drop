@@ -1,12 +1,14 @@
 import { FilePicker } from './FilePicker';
 import { FilePreview } from './FilePreview';
+import { useInitTransfer } from '../hooks/useInitTransfer';
 
 export const FileSwitcher = ({ hasFiles, onChange, multipleFiles }) => {
-  return (
+  const transferring = useInitTransfer();
 
-    hasFiles ?
+  return (
+    (hasFiles || transferring) ?
       <>
-        <FilePreview active='active' multipleFiles={multipleFiles} />
+        <FilePreview active='active' multipleFiles={multipleFiles} transferring={transferring} />
       </> :
       <>
         <FilePreview />

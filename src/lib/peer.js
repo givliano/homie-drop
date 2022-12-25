@@ -143,6 +143,15 @@ class Peer {
         buf = new Uint8ClampedArray(parseInt(dataInfo.size));
         count = 0;
         console.log(`Expecting a total of ${buf.byteLength} bytes`);
+
+        document.dispatchEvent(new CustomEvent('initdatatransfer', {
+          detail: {
+            name: dataInfo.name,
+            size: dataInfo.size,
+            type: dataInfo.type
+          }
+        }));
+
         return;
       }
 
@@ -224,6 +233,14 @@ class Peer {
         logError('Connection was lost. Peer closed the connection.');
         return;
       }
+
+      document.dispatchEvent(new CustomEvent('initdatatransfer', {
+        detail: {
+          name: file.name,
+          size: file.size,
+          type: file.type
+        }
+      }));
 
       // Send first message with file buffer length
       this.send(JSON.stringify({
