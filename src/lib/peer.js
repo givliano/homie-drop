@@ -128,6 +128,8 @@ class Peer {
     dataChannel.onmessage = this.receiveDataFactory();
   }
 
+  // Factory for the `onmessage` listener. When a peer will send a new file,
+  // the first message will be a stringified object . The next ones are the actual data.
   receiveDataFactory() {
     let buf;
     let count;
@@ -174,6 +176,7 @@ class Peer {
 
   // Add data to the queue and send it to the peer if not paused.
   // Otherwise cache it and wait for the buffer to be low.
+  // Wrapper for the `dataChannel.send` to add the data queueing capability.
   send(data) {
     this.queue.push(data);
 
@@ -184,6 +187,8 @@ class Peer {
     this.shiftQueue();
   }
 
+  // Handles the buffered querer according to the `bufferedamount`,
+  // this way the browser doesn't overflow the channel when sending big files.
   shiftQueue() {
     this.paused = false;
     let message = this.queue.shift();
