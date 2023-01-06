@@ -10,7 +10,11 @@ export const QrModal = ({ active }) => {
 
   return (
     <div className={`modal-wrapper ${active}`}>
-      <button className="btn-close">X</button>
+      <button className="btn-close">
+        <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+          <path stroke="white" d="M 0 0 L 20 20 M 20 0 L 0 20" />
+        </svg>
+      </button>
       { url && <Kjua text={url} /> }
     </div>
   );
