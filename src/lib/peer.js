@@ -216,7 +216,7 @@ class Peer {
     }
   }
 
-  async sendPhoto() {
+  async sendFiles() {
     // Split data in chunks of maximum allowed in the webRTC spec, 64 KiB.
     const CHUNK_LEN = 65535;
     const previewContainer = document.getElementById('preview');

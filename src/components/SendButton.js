@@ -5,7 +5,7 @@ export const SendButton = () => {
     <div>
       <button
         className='send-button'
-        onClick={() => peer.sendPhoto()}
+        onClick={() => peer.sendFiles()}
       >
         Send
       </button>
