@@ -214,7 +214,7 @@ h1 {
 
 .modal-wrapper {
   position: absolute;
-  top: 100vh;
+  top: 110vh;
   left: 0;
   right: 0;
   transition: all 200ms ease-out;
@@ -224,7 +224,7 @@ h1 {
 }
 
 .modal-wrapper.active {
-  transform: translate3d(0, -70vh, 0);
+  transform: translate3d(0, -83vh, 0);
 }
 
 .btn-close {
