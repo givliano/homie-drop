@@ -66,7 +66,7 @@ function HomePage() {
 
         <LinkShare active={hasFiles} onClick={handleQrRender} />
       </div>
-      <QrModal active={renderQrCode ? 'active' : ''} />
+      <QrModal active={renderQrCode ? 'active' : ''} closeButtonClick={handleModalClick} />
     </div>
   );
 }
