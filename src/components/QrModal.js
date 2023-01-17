@@ -15,7 +15,7 @@ export const QrModal = ({ active, closeButtonClick }) => {
           <path stroke="white" d="M 0 0 L 20 20 M 20 0 L 0 20" />
         </svg>
       </button>
-      { url && <Kjua text={url} /> }
+      { url && <Kjua text={url} back='#ebe8ff' quiet='2'/> }
     </div>
   );
 }
