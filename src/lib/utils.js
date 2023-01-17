@@ -66,3 +66,7 @@ export async function createFilePreview(file) {
 
   img.src = objectURL;
 }
+
+export function dispatchEvent(eventName, data) {
+  document.dispatchEvent(new CustomEvent(eventName, { detail: data } ));
+}

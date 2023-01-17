@@ -1,4 +1,4 @@
-import { logError } from './utils.js';
+import { logError, dispatchEvent } from './utils.js';
 import { socket } from './socket';
 
 /**
@@ -146,13 +146,11 @@ class Peer {
         count = 0;
         console.log(`Expecting a total of ${buf.byteLength} bytes`);
 
-        document.dispatchEvent(new CustomEvent('initdatatransfer', {
-          detail: {
-            name: dataInfo.name,
-            size: dataInfo.size,
-            type: dataInfo.type
-          }
-        }));
+        dispatchEvent('transfer:init', {
+          name: dataInfo.name,
+          size: dataInfo.size,
+          type: dataInfo.type
+        });
 
         return;
       }
@@ -162,6 +160,8 @@ class Peer {
 
       count += data.byteLength;
       console.log(`Received data count: ${count}`);
+
+      dispatchEvent('transfer:progress', { progress: data.byteLength });
 
       if (count === buf.byteLength) {
         this.getCompleteFile(buf, dataInfo);
@@ -209,6 +209,11 @@ class Peer {
 
       try {
         this.dataChannel.send(message);
+        // Since first message is a stringified object
+        // we avoid sending it as progress.
+        if (typeof message !== 'string') {
+          dispatchEvent('transfer:progress', { progress: message.byteLength });
+        }
         message = this.queue.shift();
       } catch (e) {
         logError(e);
@@ -239,13 +244,11 @@ class Peer {
         return;
       }
 
-      document.dispatchEvent(new CustomEvent('initdatatransfer', {
-        detail: {
-          name: file.name,
-          size: file.size,
-          type: file.type
-        }
-      }));
+      dispatchEvent('transfer:init', {
+        name: file.name,
+        size: file.size,
+        type: file.type
+      });
 
       // Send first message with file buffer length
       this.send(JSON.stringify({

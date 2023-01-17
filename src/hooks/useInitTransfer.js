@@ -1,21 +1,19 @@
 import { useEffect, useState } from "react";
 
 export function useInitTransfer() {
-  const [transferring, setTransferring] = useState(null);
+  const [fileInfo, setFileInfo] = useState(null);
 
-  function handleTransferring(data) {
-    setTransferring(data);
+  function handleTransferring({ detail }) {
+    setFileInfo(detail);
   }
 
   useEffect(() => {
-    document.addEventListener('initdatatransfer', ({ detail }) => {
-      handleTransferring(detail);
-    });
+    document.addEventListener('transfer:init', handleTransferring);
 
     return () => {
-      document.removeEventListener('initdatatransfer');
+      document.removeEventListener('transfer:init', handleTransferring);
     };
-  }, []);
+  }, [fileInfo]);
 
-  return transferring;
+  return fileInfo;
 }

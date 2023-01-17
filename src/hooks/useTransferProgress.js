@@ -3,17 +3,15 @@ import { useEffect, useState } from "react";
 export function useTransferProgress() {
   const [progress, setProgress] = useState(0);
 
-  function handleProgress(progress) {
-    setProgress(progress);
+  function handleProgress({ detail }) {
+    setProgress(p => p + detail.progress);
   }
 
   useEffect(() => {
-    document.addEventListener('transferprogress', ({ detail }) => {
-      handleProgress(detail.progress);
-    });
+    document.addEventListener('transfer:progress', handleProgress);
 
     return () => {
-      document.removeEventListener('transferprogress');
+      document.removeEventListener('transfer:progress', handleProgress);
     };
   }, []);
 
