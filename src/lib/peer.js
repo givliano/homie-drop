@@ -138,7 +138,6 @@ class Peer {
     return (e) => {
       // Sending peer will send the size of the buffer and mime
       // before sending the data.
-      console.log('****** \n ONMESSAGE', e);
       if (typeof e.data === 'string') {
         dataInfo = JSON.parse(e.data);
         // Create a buffer for the next data.
