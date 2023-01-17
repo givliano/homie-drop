@@ -13,7 +13,6 @@ function HomePage() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [isInitiator, setIsInitiator] = useState(false);
   const [hasFiles, setHasFiles] = useState(false);
-  const [moreThanThreeFiles, setMoreThanThreeFiles] = useState(false);
   const [renderQrCode, setRenderQrCode] = useState(false);
   const modal = useRef();
 
@@ -38,10 +37,6 @@ function HomePage() {
     }
 
     setHasFiles(true);
-
-    if (e.target.files.length > 2) {
-      setMoreThanThreeFiles(true);
-    }
   }
 
   const handleModalClick = () => {
@@ -58,7 +53,7 @@ function HomePage() {
         <div className="media">
           <Rect />
           <div className="file-wrapper">
-            <FileSwitcher hasFiles={hasFiles} onChange={handleInputChange} multipleFiles={moreThanThreeFiles} />
+            <FileSwitcher hasFiles={hasFiles} onChange={handleInputChange} />
           </div>
         </div>
 

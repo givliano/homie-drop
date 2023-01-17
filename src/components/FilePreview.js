@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import { useTransferProgress } from '../hooks/useTransferProgress';
 import { useInitTransfer } from '../hooks/useInitTransfer';
 
-export const FilePreview = ({ active = '', multipleFiles, transferring }) => {
-  const adjustWrapper = multipleFiles ? 'adjust-wrapper' : '';
-
+export const FilePreview = ({ active = '', transferring }) => {
   const fileInfo = useInitTransfer();
   // Gets the byte size of the received message from the channel.
   const transferProgress = useTransferProgress();
@@ -26,15 +24,19 @@ export const FilePreview = ({ active = '', multipleFiles, transferring }) => {
   }, [transferProgress])
 
   return (
-    <div className={`file-preview__wrapper ${active} ${adjustWrapper}`}>
-      <div id='preview' className={adjustWrapper}>{transferring &&
-        <>
-          <div>Percentage: 0</div>
-          <div>{transferring.name}</div>
-          <div>{transferring.size}</div>
-          <div>{transferring.type}</div>
-        </>
-      }</div>
+    <div className={`file-preview__wrapper ${active}`}>
+      <div id='preview'>
+        {
+          // transferring &&
+          fileInfo &&
+            <>
+              <div>{percentage}%</div>
+              <div>{fileInfo.name}</div>
+              <div>{fileInfo.size}</div>
+              <div>{fileInfo.type}</div>
+            </>
+        }
+      </div>
     </div>
   );
 }
