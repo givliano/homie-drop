@@ -269,12 +269,12 @@ class Peer {
       }
 
       // Advance the file preview container to center the download item in the middle.
-      if (!isLastElement) {
-        const previewStyle = window.getComputedStyle(previewContainer);
-        const cssTransformMatrix = new WebKitCSSMatrix(previewStyle.transform);
-        cssTransformMatrix.translateSelf(-120, 0, 0);
-        previewContainer.style.transform = cssTransformMatrix;
-      }
+      // if (!isLastElement) {
+        // const previewStyle = window.getComputedStyle(previewContainer);
+        // const cssTransformMatrix = new WebKitCSSMatrix(previewStyle.transform);
+        // cssTransformMatrix.translateSelf(-120, 0, 0);
+        // previewContainer.style.transform = cssTransformMatrix;
+      // }
     });
   }
 

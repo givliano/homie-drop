@@ -194,7 +194,8 @@ h1 {
   height: 100%;
   display: flex;
   align-items: center;
-  transform: translate3d(90px, 0, 0);
+  justify-content: center;
+  flex-direction: column;
 }
 
 /* // SEND BUTTON */
