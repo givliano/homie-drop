@@ -197,12 +197,12 @@ class Peer {
         this.paused = true;
         this.queue.unshift(message);
 
-        const onBufferedAmountLow = () => {
-          this.dataChannel.removeEventListener('bufferedamountlow', onBufferedAmountLow);
+        const handleBufferedAmountLow = () => {
+          this.dataChannel.removeEventListener('bufferedamountlow', handleBufferedAmountLow);
           this.shiftQueue();
         }
 
-        this.dataChannel.addEventListener('bufferedamountlow', onBufferedAmountLow);
+        this.dataChannel.addEventListener('bufferedamountlow', handleBufferedAmountLow);
         return;
       }
 
