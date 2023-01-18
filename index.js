@@ -90,5 +90,4 @@ nextApp.prepare().then(async () => {
       console.log('Received BYE :^)');
     });
   });
-
 })
