@@ -71,11 +71,11 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-color: var(--blue);
+  border-color: var(--purple);
 }
 
 .link:active {
-  border-color: var(--purple);
+  border-color: var(--blue);
   opacity: 0.7;
 }
 
