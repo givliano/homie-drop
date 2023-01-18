@@ -49,7 +49,7 @@ h1 {
   width: 100vw;
 }
 
-.linkShare {
+.link-share {
   background-color: transparent;
   border-radius: 25px 25px 0 0;
   width: 300px;
@@ -57,9 +57,10 @@ h1 {
   background-color: var(--dark-grey);
   transition: transform 200ms ease-out;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-around;
   flex: 1;
+  padding-bottom: 5rem;
 }
 
 .link {
@@ -72,6 +73,7 @@ h1 {
   align-items: center;
   justify-content: center;
   border-color: var(--purple);
+  margin-top: 1rem;
 }
 
 .send-buttn:active,
@@ -82,6 +84,8 @@ h1 {
 
 .link-text {
   text-align: center;
+  display: block;
+  width: 100%;
 }
 
 .media {
