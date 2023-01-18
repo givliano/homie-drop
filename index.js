@@ -3,7 +3,6 @@
 /****************************************************************************
 * Static Server
 ****************************************************************************/
-
 import * as os from 'os';
 import * as http from 'http';
 import * as path from 'path';
@@ -90,4 +89,4 @@ nextApp.prepare().then(async () => {
       console.log('Received BYE :^)');
     });
   });
-})
+});
