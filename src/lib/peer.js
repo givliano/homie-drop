@@ -236,7 +236,10 @@ class Peer {
     // Split data in chunks of maximum allowed in the webRTC spec, 64 KiB.
     const CHUNK_LEN = 65535;
 
-    this.files.forEach(async (file, i) => {
+    // Leaving the for loop since the forEach method is being unreliable in the iteration
+    // resolution for some reason.
+    for (let i = 0; i < this.files.length; i++) {
+      const file = this.files[i];
       const fileBuffer = await file.arrayBuffer();
       const buffer = new Uint8ClampedArray(fileBuffer);
       const bufferLen = buffer.byteLength;
@@ -258,9 +261,9 @@ class Peer {
       }));
 
       // Send the chunks
-      for (let i = 0; i < nChunks; i++) {
-        const start = i * CHUNK_LEN;
-        const end = (i + 1) * CHUNK_LEN;
+      for (let j = 0; j < nChunks; j++) {
+        const start = j * CHUNK_LEN;
+        const end = (j + 1) * CHUNK_LEN;
         // Start is inclusive, end is exclusive
         this.send(buffer.subarray(start, end));
       }
@@ -273,7 +276,7 @@ class Peer {
       // Marks the `END OF SESSION` when it's the last file to be transferred
       // or the `END OF FILE` when it is the last chunk.
       (i === (this.files.length - 1)) ? this.send('EOS') : this.send('EOF');
-    });
+    }
   }
 
   downloadFile(blob, fileName) {
