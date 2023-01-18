@@ -55,14 +55,10 @@ export function initSocket(setIsConnected, setIsInitiator, isInitiator) {
 
   socket.on('disconnect', (reason) => {
     console.log('Disconnected: ', reason);
-    // sendBtn.disabled = true;
-    // snapAndSendBtn.disabeld = true;
   });
 
   socket.on('bye', (room) => {
     console.log(`Peer leaving room ${room}`);
-    // sendBtn.disabled = true;
-    // snapAndSendBtn.disabled = true;
 
     // If peer did not create the room, re-enter to be creator.
     // @TODO currently not working
