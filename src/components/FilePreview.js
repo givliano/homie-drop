@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+
 import { useTransferProgress } from '../hooks/useTransferProgress';
 import { useInitTransfer } from '../hooks/useInitTransfer';
+import { SendButton }from '../components/SendButton';
 
 export const FilePreview = ({ active = '', transferring }) => {
   const fileInfo = useInitTransfer();

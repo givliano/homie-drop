@@ -3,7 +3,6 @@ import { peer } from '../lib/peer';
 import { socket } from '../lib/socket';
 
 import { LinkShare } from '../components/LinkShare';
-import { SendButton }from '../components/SendButton';
 import { FileSwitcher } from '../components/FileSwitcher';
 import { QrModal } from '../components/QrModal';
 import { Rect } from '../components/Rect';
@@ -56,8 +55,6 @@ function HomePage() {
             <FileSwitcher hasFiles={hasFiles} onChange={handleInputChange} />
           </div>
         </div>
-
-        {hasFiles && <SendButton />}
 
         <LinkShare active={hasFiles} onClick={handleQrRender} />
       </div>

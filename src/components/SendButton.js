@@ -2,13 +2,13 @@ import { peer } from '../lib/peer';
 
 export const SendButton = () => {
   return (
-    <div>
+    <>
       <button
         className='send-button'
         onClick={() => peer.sendFiles()}
       >
-        Send
+        send file(s)
       </button>
-    </div>
+    </>
   )
 }
