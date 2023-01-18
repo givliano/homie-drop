@@ -17,6 +17,7 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+const port = 3000;
 
 const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({ dev })
@@ -28,7 +29,7 @@ nextApp.prepare().then(async () => {
   const io = new socketIO.Server();
   io.attach(server);
 
-  server.listen(3000);
+  server.listen(port);
   app.all('*', (req, res) => nextHandler(req, res));
   console.log(__dirname + '/src/public');
   app.use('/', express.static(path.join(__dirname, '/src/public')));
