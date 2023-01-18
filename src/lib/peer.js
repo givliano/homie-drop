@@ -145,11 +145,7 @@ class Peer {
         count = 0;
         console.log(`Expecting a total of ${buf.byteLength} bytes`);
 
-        dispatchEvent('transfer:init', {
-          name: dataInfo.name,
-          size: dataInfo.size,
-          type: dataInfo.type
-        });
+        dispatchEvent('transfer:init', e.data);
 
         return;
       }
@@ -212,7 +208,12 @@ class Peer {
         // we avoid sending it as progress.
         if (typeof message !== 'string') {
           dispatchEvent('transfer:progress', { progress: message.byteLength });
+        } else if (typeof message === 'string' && message !== 'EOF') {
+          dispatchEvent('transfer:init', message);
+        } else if ((message === 'EOF') && (this.queue.length > 0)) { // if it's the last message we dont reset the progress
+          dispatchEvent('transfer:progress', { progress: 0 });
         }
+
         message = this.queue.shift();
       } catch (e) {
         logError(e);
@@ -243,12 +244,6 @@ class Peer {
         return;
       }
 
-      dispatchEvent('transfer:init', {
-        name: file.name,
-        size: file.size,
-        type: file.type
-      });
-
       // Send first message with file buffer length
       this.send(JSON.stringify({
         name: file.name,
@@ -269,6 +264,8 @@ class Peer {
         console.log(`Last ${bufferLen % CHUNK_LEN} byte(s)`);
         this.send(buffer.subarray(nChunks * CHUNK_LEN));
       }
+
+      this.send('EOF')
 
       // Advance the file preview container to center the download item in the middle.
       // if (!isLastElement) {

@@ -43,7 +43,6 @@ const Rect = () => {
       blueRect.current.style.strokeDashoffset = INITIAL_OFFSET;
       blueRect.current.style.opacity = 0;
       setIsVisible(false);
-      setPercentage(0);
     }
   }, [percentage])
 
