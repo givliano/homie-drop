@@ -4,7 +4,8 @@ export function useInitTransfer() {
   const [fileInfo, setFileInfo] = useState(null);
 
   function handleTransferring({ detail }) {
-    setFileInfo(detail);
+    const file = JSON.parse(detail);
+    setFileInfo(file);
   }
 
   useEffect(() => {
