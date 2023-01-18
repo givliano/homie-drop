@@ -138,6 +138,12 @@ class Peer {
     let dataInfo;
 
     return (e) => {
+      if (e.data === 'EOS') {
+        return;
+      } else if (e.data === 'EOF') {
+        dispatchEvent('transfer:progress', { progress: 0 });
+        return;
+      }
       // Sending peer will send the size of the buffer and mime
       // before sending the data.
       if (typeof e.data === 'string') {
@@ -209,9 +215,11 @@ class Peer {
         // we avoid sending it as progress.
         if (typeof message !== 'string') {
           dispatchEvent('transfer:progress', { progress: message.byteLength });
-        } else if (typeof message === 'string' && message !== 'EOF') {
+        } else if ((typeof message === 'string') && (message !== 'EOF') && (message !== 'EOS')) {
+          // Sending the stringified object
           dispatchEvent('transfer:init', message);
-        } else if ((message === 'EOF') && (this.queue.length > 0)) { // if it's the last message we dont reset the progress
+        } else if ((message === 'EOF')) {
+          // if it's the last message we dont reset the progress
           dispatchEvent('transfer:progress', { progress: 0 });
         }
 
@@ -259,11 +267,13 @@ class Peer {
 
       // Send the remainder, if any.
       if (bufferLen % CHUNK_LEN) {
-        console.log(`Last ${bufferLen % CHUNK_LEN} byte(s)`);
+        // console.log(`Last ${bufferLen % CHUNK_LEN} byte(s)`);
         this.send(buffer.subarray(nChunks * CHUNK_LEN));
       }
 
-      this.send('EOF')
+      // Marks the `END OF SESSION` when it's the last file to be transferred
+      // or the `END OF FILE` when it is the last chunk.
+      (i === (this.files.length - 1)) ? this.send('EOS') : this.send('EOF');
 
       // Advance the file preview container to center the download item in the middle.
       // if (!isLastElement) {
