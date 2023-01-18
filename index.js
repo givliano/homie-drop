@@ -4,18 +4,11 @@
 * Static Server
 ****************************************************************************/
 
-// const os = require('os');
 import * as os from 'os';
-// const http = require('http');
 import * as http from 'http';
-// const path = require('path');
 import * as path from 'path';
-// const socketIO = require('socket.io');
 import * as socketIO from 'socket.io';
-// const express = require('express');
 import express from 'express';
-// For Next.js
-// const next = require('next');
 import next from 'next';
 
 // Create the variables not available in ES Modules
@@ -25,13 +18,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 
-// const app = express();
 const dev = process.env.NODE_ENV !== 'production';
-const hostname = 'localhost';
-const port = 3000;
 const nextApp = next({ dev })
 const nextHandler = nextApp.getRequestHandler();
-// const server = http.createServer(app);
 
 nextApp.prepare().then(async () => {
   const app = express();
@@ -47,8 +36,6 @@ nextApp.prepare().then(async () => {
   /****************************************************************************
   * Peer Messaging
   ****************************************************************************/
-
-  // const io = socketIO.listen(server);
   io.sockets.on('connection', function(socket) {
     // Convenience function to log server messages on the client
     function log() {
