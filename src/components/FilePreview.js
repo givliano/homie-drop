@@ -27,14 +27,18 @@ export const FilePreview = ({ active = '', transferring }) => {
     <div className={`file-preview__wrapper ${active}`}>
       <div id='preview'>
         {
-          // transferring &&
-          fileInfo &&
+          fileInfo ?
             <>
-              <div>{percentage}%</div>
-              <div>{fileInfo.name}</div>
-              <div>{fileInfo.size}</div>
-              <div>{fileInfo.type}</div>
-            </>
+              <div className="file-transfer__progress">
+                <div>Transfer Progress:</div>
+                <div>{percentage}%</div>
+              </div>
+              <div className="file-transfer__name">
+                <div>File Name:</div>
+                <div>{fileInfo.name}</div>
+              </div>
+            </> :
+            <SendButton />
         }
       </div>
     </div>
