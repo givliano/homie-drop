@@ -267,21 +267,12 @@ class Peer {
 
       // Send the remainder, if any.
       if (bufferLen % CHUNK_LEN) {
-        // console.log(`Last ${bufferLen % CHUNK_LEN} byte(s)`);
         this.send(buffer.subarray(nChunks * CHUNK_LEN));
       }
 
       // Marks the `END OF SESSION` when it's the last file to be transferred
       // or the `END OF FILE` when it is the last chunk.
       (i === (this.files.length - 1)) ? this.send('EOS') : this.send('EOF');
-
-      // Advance the file preview container to center the download item in the middle.
-      // if (!isLastElement) {
-        // const previewStyle = window.getComputedStyle(previewContainer);
-        // const cssTransformMatrix = new WebKitCSSMatrix(previewStyle.transform);
-        // cssTransformMatrix.translateSelf(-120, 0, 0);
-        // previewContainer.style.transform = cssTransformMatrix;
-      // }
     });
   }
 
