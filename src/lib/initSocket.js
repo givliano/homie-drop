@@ -65,6 +65,7 @@ export function initSocket(setIsConnected, setIsInitiator, isInitiator) {
     // snapAndSendBtn.disabled = true;
 
     // If peer did not create the room, re-enter to be creator.
+    // @TODO currently not working
     if (!isInitiator) {
       window.location.reload();
     }

@@ -1,6 +1,8 @@
 import { logError, dispatchEvent } from './utils.js';
 import { socket } from './socket';
 
+// @TODO when one of the peers leaves, the other one should be the initiator if now,
+//otherwise on refresh one
 /**
  * WebRTC peer connection and data channel
  */
@@ -221,6 +223,8 @@ class Peer {
     }
   }
 
+  // Send the files to the queue as a intermidiate step
+  // to avoid overflowing the channel buffer by sending it withoug queueing.
   async sendFiles() {
     // Split data in chunks of maximum allowed in the webRTC spec, 64 KiB.
     const CHUNK_LEN = 65535;
@@ -244,7 +248,7 @@ class Peer {
         return;
       }
 
-      // Send first message with file buffer length
+      // Send first message with file buffer data
       this.send(JSON.stringify({
         name: file.name,
         size: file.size,
