@@ -168,7 +168,6 @@ class Peer {
 
   async setFiles(file) {
     this.files.push(file);
-    await this.createFilePreview(file);
   }
 
   // Add data to the queue and send it to the peer if not paused.
@@ -228,17 +227,12 @@ class Peer {
   async sendFiles() {
     // Split data in chunks of maximum allowed in the webRTC spec, 64 KiB.
     const CHUNK_LEN = 65535;
-    const previewContainer = document.getElementById('preview');
 
     this.files.forEach(async (file, i) => {
-      const isLastElement = (i === this.files.length - 1);
-
       const fileBuffer = await file.arrayBuffer();
       const buffer = new Uint8ClampedArray(fileBuffer);
       const bufferLen = buffer.byteLength;
       const nChunks = bufferLen / CHUNK_LEN | 0;
-
-      console.log(`Sending a total of ${bufferLen} byte(s).`);
 
       if (!this.dataChannel) {
         logError('Connection has not been initiated. ' + 'Get two peers in the same room first');
