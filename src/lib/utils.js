@@ -30,6 +30,20 @@ export function animate({ timing, draw, duration }) {
   });
 }
 
+function animatePath(el, distance) {
+    if (el !== null) {
+      animate({
+        duration: 10,
+        timing(timeFraction) {
+          return timeFraction;
+        },
+        draw(progress) {
+          el.style.strokeDashoffset = (1000 - (progress * distance));
+        }
+      });
+    }
+  }
+
 export async function createFilePreview(file) {
   const objectURL = window.URL.createObjectURL(file);
   const img = document.createElement('img');

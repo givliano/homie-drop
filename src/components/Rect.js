@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { animate } from '../lib/utils';
 import { useTransferProgress } from '../hooks/useTransferProgress';
 import { useInitTransfer } from '../hooks/useInitTransfer';
 
@@ -45,25 +44,6 @@ const Rect = () => {
       setIsVisible(false);
     }
   }, [percentage])
-
-  useEffect(() => {
-    console.log('FILE INFO', fileInfo);
-  }, [fileInfo]);
-
-
-  function animatePath(el, distance) {
-    if (el !== null) {
-      animate({
-        duration: 200,
-        timing(timeFraction) {
-          return timeFraction;
-        },
-        draw(progress) {
-          el.style.strokeDashoffset = (-1000 - (progress * distance));
-        }
-      });
-    }
-  }
 
   return (
     <svg xmlns="http://www.w3.org/2000/svg" className="rect" viewBox="0 0 300 200">
