@@ -19,6 +19,21 @@ const Rect = () => {
     setPercentage((transferProgress / fileInfo.size * 100).toFixed(2));
   }
 
+  function setRectVisible() {
+    blueRect.current.style.opacity = 1;
+    setIsVisible(true);
+  }
+
+  function resetRect() {
+    blueRect.current.style.strokeDashoffset = INITIAL_OFFSET;
+    blueRect.current.style.opacity = 0;
+    setIsVisible(false);
+  }
+
+  function animateRectByProgress(percentage) {
+    blueRect.current.style.strokeDashoffset = (INITIAL_OFFSET - (10 * percentage));
+  }
+
   useEffect(() => {
     if (!fileInfo) {
       return;
@@ -33,17 +48,13 @@ const Rect = () => {
     }
 
     if (!isVisible) {
-      blueRect.current.style.opacity = 1;
-      setIsVisible(true);
+      setRectVisible();
     }
 
-    blueRect.current.style.strokeDashoffset = (INITIAL_OFFSET - (10 * percentage));
-    // animatePath(blueRect.current, (percentage * 10));
+    animateRectByProgress(percentage);
 
     if ((percentage == 0) && isVisible) {
-      blueRect.current.style.strokeDashoffset = INITIAL_OFFSET;
-      blueRect.current.style.opacity = 0;
-      setIsVisible(false);
+      resetRect();
     }
   }, [percentage])
 
