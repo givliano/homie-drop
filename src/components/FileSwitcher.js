@@ -3,14 +3,16 @@ import { FilePreview } from './FilePreview';
 import { useInitTransfer } from '../hooks/useInitTransfer';
 
 export const FileSwitcher = ({ hasFiles, onChange }) => {
+  // Handles the receiving side rendering the right component.
+  const fileInfo = useInitTransfer();
 
   return (
-    (hasFiles) ?
+    (hasFiles || fileInfo) ?
       <>
         <FilePreview active='active' />
       </> :
       <>
-        <FilePreview />
+        <FilePreview transferring={fileInfo} />
         <FilePicker onChange={onChange} active='active' />
       </>
   );
