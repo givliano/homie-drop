@@ -11,6 +11,7 @@ const Rect = () => {
 
   const fileInfo = useInitTransfer();
   const transferProgress = useTransferProgress();
+
   const [percentage, setPercentage] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -22,6 +23,7 @@ const Rect = () => {
     if (!fileInfo) {
       return;
     }
+
     handleProgress();
   }, [transferProgress]);
 
