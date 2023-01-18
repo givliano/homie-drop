@@ -3,6 +3,8 @@ import { animate } from '../lib/utils';
 import { useTransferProgress } from '../hooks/useTransferProgress';
 import { useInitTransfer } from '../hooks/useInitTransfer';
 
+const INITIAL_OFFSET = 1000;
+
 const Rect = () => {
   const blueRect = useRef(null);
   const maskRect = useRef(null);
@@ -34,11 +36,11 @@ const Rect = () => {
       setIsVisible(true);
     }
 
-    blueRect.current.style.strokeDashoffset = (1000 - (10 * percentage));
+    blueRect.current.style.strokeDashoffset = (INITIAL_OFFSET - (10 * percentage));
     // animatePath(blueRect.current, (percentage * 10));
 
-    if (percentage === 1) {
-      blueRect.current.style.strokeDashoffset = 1000;
+    if ((percentage == 0) && isVisible) {
+      blueRect.current.style.strokeDashoffset = INITIAL_OFFSET;
       blueRect.current.style.opacity = 0;
       setIsVisible(false);
       setPercentage(0);
