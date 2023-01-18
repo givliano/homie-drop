@@ -10,3 +10,7 @@ export function logError(err) {
     console.warn(err.toString(), err);
   }
 }
+
+export function dispatchEvent(eventName, data) {
+  document.dispatchEvent(new CustomEvent(eventName, { detail: data } ));
+}
