@@ -4,9 +4,9 @@
 * Static Server
 ****************************************************************************/
 import * as os from 'os';
-import * as http from 'http';
+import { createServer } from 'http';
 import * as path from 'path';
-import * as socketIO from 'socket.io';
+import { Server } from 'socket.io';
 import express from 'express';
 import next from 'next';
 
@@ -24,8 +24,9 @@ const nextHandler = nextApp.getRequestHandler();
 
 nextApp.prepare().then(async () => {
   const app = express();
-  const server = http.createServer(app);
-  const io = new socketIO.Server();
+  // Returns a new node http.Server, letting express handle the requests and responses
+  const server = createServer(app);
+  const io = new Server();
   io.attach(server);
 
   server.listen(port);
