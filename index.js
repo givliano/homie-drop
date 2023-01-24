@@ -38,6 +38,7 @@ nextApp.prepare().then(async () => {
   * Peer Messaging
   ****************************************************************************/
   io.sockets.on('connection', function(socket) {
+    let socketRoom;
     // Convenience function to log server messages on the client
     function log() {
       const array = ['Message from server:'];
@@ -46,13 +47,20 @@ nextApp.prepare().then(async () => {
     }
 
     socket.on('message', function(message) {
+      if (!socketRoom) {
+        log('No room to emit message.');
+        return;
+      }
       log('Client said: ', message);
       // For a real app, would be room-only (not broadcast).
-      socket.broadcast.emit('message', message);
+      // socket.broadcast.emit('message', message);
+      // Broadcast to room only
+      socket.broadcast.to(socketRoom).emit('message', message);
     });
 
     socket.on('create or join', function(room) {
       log('Received request to create or join room '+ room);
+      socketRoom = room;
 
       const clientsInRoom = io.sockets.adapter.rooms.get(room);
       const numClients = clientsInRoom ? clientsInRoom.size : 0;
