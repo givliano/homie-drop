@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { peer } from '../lib/peer';
-import { socket } from '../lib/socket';
+import { peer } from '../src/lib/peer';
+import { socket } from '../src/lib/socket';
 
-import { LinkShare } from '../components/LinkShare';
-import { FileSwitcher } from '../components/FileSwitcher';
-import { QrModal } from '../components/QrModal';
-import { Rect } from '../components/Rect';
-import { initSocket } from '../lib/initSocket';
+import { LinkShare } from '../src/components/LinkShare';
+import { FileSwitcher } from '../src/components/FileSwitcher';
+import { QrModal } from '../src/components/QrModal';
+import { Rect } from '../src/components/Rect';
+import { initSocket } from '../src/lib/initSocket';
 
 function HomePage() {
   const [isConnected, setIsConnected] = useState(socket.connected);
